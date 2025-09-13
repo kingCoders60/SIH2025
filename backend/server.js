@@ -28,7 +28,7 @@ app.get("/",(req,res)=>{
 connectDB()
 .then(()=>{
     app.listen(PORT,()=>{
-        console.log(`Server is running at PORT: ${PORT}`);
+        console.log(`Server is live at http://localhost:${PORT}`);
     });
 })
 .catch((err)=>{
