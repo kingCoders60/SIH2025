@@ -1,72 +1,108 @@
-# 🌐 Disaster Preparedness Platform — Backend Overview
+🛡️ Disaster Preparedness Platform
+A scalable, modular MERN-based platform designed to enhance disaster awareness, preparedness, and response across Indian educational institutions. It integrates real-time alerts, gamified learning, and region-specific risk intelligence through ML-powered microservices.
 
-Refrence Docs:  https://docs.google.com/document/d/1ghVRYjTGqUyCVltGO3n1ys2Ib0bqNGlwdWxZ4AESR88/edit?usp=sharing
+ Refrence FIle : https://docs.google.com/document/d/1ghVRYjTGqUyCVltGO3n1ys2Ib0bqNGlwdWxZ4AESR88/edit?usp=sharing
+ 
+🧭 Overview
+This platform empowers students and institutions to:
 
-This backend powers a modular, scalable disaster preparedness system tailored for Indian educational institutions. Built on the MERN stack, it integrates authentication, drill tracking, disaster modules, and ML microservices for risk intelligence and gamified learning.
+Assess disaster risks based on location and infrastructure
 
----
+Participate in interactive drills and preparedness scoring
 
-## 🧱 Architecture Highlights
+Receive real-time alerts and safety recommendations
 
-- **Node.js + Express** — RESTful API server
-- **MongoDB + Mongoose** — Flexible NoSQL data layer
-- **JWT Authentication** — Secure user access
-- **Flask Microservices** — ML endpoints for scoring and prediction
-- **Modular Controllers & Routes** — Clean separation of concerns
+Learn through gamified modules tailored to regional hazards
 
----
+🚀 Features
+🔐 Authentication: Secure login/signup with JWT-based session management
 
-## 🔐 Core Modules
+🌋 Disaster Modules: Earthquake, flood, cyclone, and fire preparedness workflows
 
-### Authentication
-- Register, login, and token-based access
-- Role support for `user` and `admin`
+🧠 ML Microservices: Flask-based services for risk prediction, scoring, and gamification logic
 
-### Disaster Management
-- Create and fetch disaster types
-- Region-specific filtering (planned)
+🧪 Drill APIs: Track, simulate, and evaluate drill participation
 
-### Drill Tracking
-- Log drills with type, date, and status
-- User-specific drill history
+📊 Admin Dashboard: Institution-level analytics and user management
 
-### ML Integration
-- `/ml/risk-score` — Predict disaster risk
-- `/ml/preparedness-score` — Evaluate readiness
-- `/ml/game-score` — Gamify drill performance
+📍 Geo-Intelligence: Region-specific risk mapping and alerting
 
----
+🛠️ Tech Stack
+Layer	Technology
+Frontend	React.js, Vite, Tailwind CSS
+Backend	Node.js, Express.js, MongoDB
+ML Services	Python, Flask, scikit-learn
+Auth	JWT, bcrypt
+Deployment	Docker, Nginx, PM2
+📦 Installation & Setup
+bash
+# Clone the repo
+git clone https://github.com/your-org/disaster-preparedness-platform.git
+cd disaster-preparedness-platform
 
-## ⚙️ Setup & Usage
+# Install backend dependencies
+cd backend
+npm install
 
-1. Clone the repo  
-   `git clone https://github.com/kingCoders60/SIH2025`
+# Install frontend dependencies
+cd ../frontend
+npm install
 
-2. Navigate to backend  
-   `cd backend`
+# Start ML microservices
+cd ../ml-services
+python risk_predictor.py
+python preparedness_score.py
+python gamification_engine.py
 
-3. Install dependencies  
-   `npm install`
+# Start backend and frontend
+cd ../backend
+npm run dev
 
-4. Configure `.env`:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_uri
-   JWT_SECRET=your_jwt_secret
-Run server npm run dev or node server.js
+cd ../frontend
+npm run dev
+🔌 API Endpoints
+Auth
+POST /api/auth/signup
 
-🔗 Frontend Integration
-Built with React + Vite + Tailwind
+POST /api/auth/login
 
-API base: http://localhost:5000/api
+Disaster Modules
+GET /api/disaster/:type
 
-JWT stored in localStorage and sent via headers
+POST /api/disaster/report
 
-📌 Roadmap
-Admin dashboard for drill analytics
+Drill
+GET /api/drill/:userId
 
-Region-specific alert system
+POST /api/drill/submit
 
-ML feedback loop for adaptive scoring
+ML Integration
+POST /ml/risk-score
 
-Deployment on Render/Railway with CI/CD
+POST /ml/preparedness-score
+
+POST /ml/gamify
+
+🧪 Testing
+bash
+# Backend tests
+cd backend
+npm test
+
+# ML microservice tests
+pytest tests/
+📁 Folder Structure
+Code
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   └── utils/
+├── frontend/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+├── ml-services/
+│   ├── risk_predictor.py
+│   ├── preparedness_score.py
+│   └── gamification_engine.py
