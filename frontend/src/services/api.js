@@ -54,6 +54,10 @@ export const drillsAPI = {
   participate: (id) => api.post(`/drills/${id}/participate`),
 }
 
+ export const gamificationAPI = {
+  getLeaderboard: (params) => api.get('/leaderboard', { params }),
+ };
+
 export const alertsAPI = {
   getAll: () => api.get("/alerts"),
   getContacts: () => api.get("/emergency-contacts"),
@@ -65,4 +69,4 @@ export const adminAPI = {
   getDrillLogs: () => api.get("/admin/drill-logs"),
 }
 
-export default api
+export default api;
