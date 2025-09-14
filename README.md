@@ -1,4 +1,4 @@
-🛡️ Disaster Preparedness Platform
+                                                   🛡️ Disaster Preparedness Platform
 A scalable, modular MERN-based platform designed to enhance disaster awareness, preparedness, and response across Indian educational institutions. It integrates real-time alerts, gamified learning, and region-specific risk intelligence through ML-powered microservices.
 
  Refrence FIle : https://docs.google.com/document/d/1ghVRYjTGqUyCVltGO3n1ys2Ib0bqNGlwdWxZ4AESR88/edit?usp=sharing
