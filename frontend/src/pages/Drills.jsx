@@ -1,335 +1,257 @@
-import React, { useState, useEffect } from 'react';
-import { drillsAPI } from '../services/api';
-import DrillSimulation from '../components/DrillSimulation';
+"use client"
+
+import { useState } from "react"
+import { useAuth } from "../context/AuthContext"
+import DrillCard from "../components/drills/DrillCard"
+import DrillSimulation from "../components/drills/DrillSimulation"
+import { mockDrills } from "../data/mockDrills"
+import { Target, Clock, Users, Filter, Calendar } from "lucide-react"
 
 const Drills = () => {
-  const [drills, setDrills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedDrill, setSelectedDrill] = useState(null);
+  const { user, updateUserStats } = useAuth()
+  const [selectedDrill, setSelectedDrill] = useState(null)
+  const [viewingDrill, setViewingDrill] = useState(null)
+  const [filterStatus, setFilterStatus] = useState("all")
+  const [filterType, setFilterType] = useState("all")
 
-  useEffect(() => {
-    fetchDrills();
-  }, []);
+  const handleJoinDrill = (drill) => {
+    setSelectedDrill(drill)
+  }
 
-  const fetchDrills = async () => {
-    try {
-      setLoading(true);
-      // Mock data for now - replace with actual API call
-      const mockDrills = [
-        {
-          id: '1',
-          title: 'Fire Evacuation Drill',
-          description: 'Practice fire evacuation procedures in a virtual environment. Learn proper exit routes and safety protocols.',
-          icon: '🔥',
-          difficulty: 'Beginner',
-          estimatedTime: 15,
-          category: 'Fire Safety',
-          steps: [
-            {
-              title: 'Alert Detection',
-              description: 'Recognize fire alarm and assess the situation',
-              icon: '🚨',
-              instructions: [
-                'Listen for fire alarm sound',
-                'Check for smoke or fire signs',
-                'Stay calm and alert others'
-              ],
-              animation: { x: 20, y: 20 }
-            },
-            {
-              title: 'Exit Planning',
-              description: 'Identify the nearest safe exit route',
-              icon: '🚪',
-              instructions: [
-                'Locate nearest emergency exit',
-                'Check if exit is clear of smoke',
-                'Have alternative route ready'
-              ],
-              animation: { x: 100, y: 20 }
-            },
-            {
-              title: 'Evacuation',
-              description: 'Follow evacuation procedures safely',
-              icon: '🏃',
-              instructions: [
-                'Walk, do not run',
-                'Stay low if there is smoke',
-                'Close doors behind you',
-                'Do not use elevators'
-              ],
-              animation: { x: 200, y: 100 }
-            },
-            {
-              title: 'Assembly Point',
-              description: 'Reach designated assembly point',
-              icon: '📍',
-              instructions: [
-                'Go to designated assembly area',
-                'Account for all team members',
-                'Wait for further instructions'
-              ],
-              animation: { x: 200, y: 200 }
-            }
-          ]
-        },
-        {
-          id: '2',
-          title: 'Earthquake Response Drill',
-          description: 'Simulate earthquake scenarios and practice safety protocols including drop, cover, and hold procedures.',
-          icon: '🌍',
-          difficulty: 'Intermediate',
-          estimatedTime: 20,
-          category: 'Earthquake',
-          steps: [
-            {
-              title: 'Drop',
-              description: 'Drop to the ground immediately',
-              icon: '⬇️',
-              instructions: [
-                'Drop to hands and knees',
-                'Protect head and neck',
-                'Stay low to the ground'
-              ],
-              animation: { x: 100, y: 100 }
-            },
-            {
-              title: 'Cover',
-              description: 'Take cover under sturdy furniture',
-              icon: '🛡️',
-              instructions: [
-                'Get under a desk or table',
-                'Hold on to furniture legs',
-                'Cover head and neck with arms'
-              ],
-              animation: { x: 100, y: 100 }
-            },
-            {
-              title: 'Hold On',
-              description: 'Hold position until shaking stops',
-              icon: '🤝',
-              instructions: [
-                'Hold on to furniture',
-                'Stay in position',
-                'Wait for shaking to stop'
-              ],
-              animation: { x: 100, y: 100 }
-            }
-          ]
-        },
-        {
-          id: '3',
-          title: 'Flood Evacuation Drill',
-          description: 'Learn flood evacuation routes and safety measures for water-related emergencies.',
-          icon: '🌊',
-          difficulty: 'Beginner',
-          estimatedTime: 18,
-          category: 'Flood',
-          steps: [
-            {
-              title: 'Flood Warning',
-              description: 'Recognize flood warning signs',
-              icon: '⚠️',
-              instructions: [
-                'Listen for flood warnings',
-                'Check water levels',
-                'Monitor weather updates'
-              ],
-              animation: { x: 20, y: 20 }
-            },
-            {
-              title: 'Move to Higher Ground',
-              description: 'Evacuate to higher elevation',
-              icon: '⛰️',
-              instructions: [
-                'Move to higher floors',
-                'Avoid flooded areas',
-                'Take essential items only'
-              ],
-              animation: { x: 100, y: 50 }
-            },
-            {
-              title: 'Safe Location',
-              description: 'Reach designated safe area',
-              icon: '🏠',
-              instructions: [
-                'Go to designated safe location',
-                'Stay away from water',
-                'Wait for rescue if needed'
-              ],
-              animation: { x: 200, y: 20 }
-            }
-          ]
-        },
-        {
-          id: '4',
-          title: 'Emergency Communication Drill',
-          description: 'Practice emergency communication protocols and coordination procedures.',
-          icon: '📡',
-          difficulty: 'Advanced',
-          estimatedTime: 25,
-          category: 'Communication',
-          steps: [
-            {
-              title: 'Assess Situation',
-              description: 'Evaluate emergency situation',
-              icon: '🔍',
-              instructions: [
-                'Assess the emergency',
-                'Identify key information',
-                'Determine communication needs'
-              ],
-              animation: { x: 100, y: 100 }
-            },
-            {
-              title: 'Contact Authorities',
-              description: 'Establish communication with emergency services',
-              icon: '📞',
-              instructions: [
-                'Call emergency services',
-                'Provide clear information',
-                'Follow instructions given'
-              ],
-              animation: { x: 100, y: 100 }
-            },
-            {
-              title: 'Coordinate Response',
-              description: 'Coordinate with team members',
-              icon: '👥',
-              instructions: [
-                'Communicate with team',
-                'Assign responsibilities',
-                'Maintain clear communication'
-              ],
-              animation: { x: 100, y: 100 }
-            }
-          ]
-        }
-      ];
-      setDrills(mockDrills);
-    } catch (error) {
-      console.error('Error fetching drills:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleViewDrill = (drill) => {
+    setViewingDrill(drill)
+  }
 
-  const handleDrillComplete = async (results) => {
-    try {
-      await drillsAPI.submitDrill(results.drillId, results);
-      // Show success message or update UI
-      setSelectedDrill(null);
-      // Refresh drills to show updated progress
-      fetchDrills();
-    } catch (error) {
-      console.error('Error submitting drill results:', error);
-    }
-  };
+  const handleDrillComplete = (completionData) => {
+    // Update user stats
+    updateUserStats({
+      drillsParticipated: (user?.stats?.drillsParticipated || 0) + 1,
+      totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
+    })
+
+    // Close drill simulation
+    setSelectedDrill(null)
+  }
+
+  const filteredDrills = mockDrills.filter((drill) => {
+    const matchesStatus = filterStatus === "all" || drill.status === filterStatus
+    const matchesType = filterType === "all" || drill.type === filterType
+    return matchesStatus && matchesType
+  })
+
+  const upcomingDrills = filteredDrills.filter((drill) => drill.status === "upcoming")
+  const activeDrills = filteredDrills.filter((drill) => drill.status === "active")
+  const completedDrills = filteredDrills.filter((drill) => drill.status === "completed")
 
   if (selectedDrill) {
     return (
-      <DrillSimulation 
-        drill={selectedDrill} 
-        onComplete={handleDrillComplete}
-      />
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="bg-white p-6 rounded-lg shadow">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
-                <div className="h-10 bg-gray-200 rounded w-24"></div>
-              </div>
-            ))}
-          </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="w-full max-w-7xl max-h-screen overflow-y-auto">
+          <DrillSimulation
+            drill={selectedDrill}
+            onComplete={handleDrillComplete}
+            onClose={() => setSelectedDrill(null)}
+          />
         </div>
       </div>
-    );
+    )
+  }
+
+  if (viewingDrill) {
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <button onClick={() => setViewingDrill(null)} className="mb-4 text-primary-600 hover:text-primary-700">
+            ← Back to Drills
+          </button>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{viewingDrill.title}</h1>
+          <p className="text-gray-600 mb-4">{viewingDrill.description}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="flex items-center text-sm text-gray-500">
+              <Clock className="h-4 w-4 mr-2" />
+              <span>{viewingDrill.duration}</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-500">
+              <Users className="h-4 w-4 mr-2" />
+              <span>{viewingDrill.participants} participants</span>
+            </div>
+            <div className="flex items-center text-sm text-gray-500">
+              <Target className="h-4 w-4 mr-2" />
+              <span className="capitalize">{viewingDrill.difficulty} difficulty</span>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 className="font-semibold text-blue-900 mb-2">Drill Objectives</h3>
+            <ul className="text-blue-800 text-sm space-y-1">
+              <li>• Practice emergency response procedures</li>
+              <li>• Improve reaction time and decision-making</li>
+              <li>• Build confidence in emergency situations</li>
+              <li>• Learn from realistic scenarios</li>
+            </ul>
+          </div>
+
+          <button
+            onClick={() => handleJoinDrill(viewingDrill)}
+            disabled={viewingDrill.status === "completed"}
+            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {viewingDrill.status === "completed" ? "Drill Completed" : "Start Drill Simulation"}
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Virtual Drills</h1>
-        <p className="text-gray-600">Practice emergency response procedures in a safe virtual environment</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {drills.map(drill => (
-          <div key={drill.id} className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow">
-            <div className="flex items-start space-x-4 mb-4">
-              <div className="text-4xl">{drill.icon}</div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{drill.title}</h3>
-                <p className="text-gray-600 text-sm mb-3">{drill.description}</p>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
-                  <span className="flex items-center">
-                    <span className="mr-1">⏱️</span>
-                    {drill.estimatedTime} min
-                  </span>
-                  <span className="flex items-center">
-                    <span className="mr-1">⭐</span>
-                    {drill.difficulty}
-                  </span>
-                  <span className="flex items-center">
-                    <span className="mr-1">📋</span>
-                    {drill.steps.length} steps
-                  </span>
-                </div>
-              </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Emergency Drills</h1>
+            <p className="text-gray-600">Practice emergency procedures with realistic simulations</p>
+          </div>
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center">
+              <Target className="h-4 w-4 mr-1" />
+              <span>{filteredDrills.length} drills</span>
             </div>
-            
-            <button 
-              onClick={() => setSelectedDrill(drill)}
-              className="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+            <div className="flex items-center">
+              <Users className="h-4 w-4 mr-1" />
+              <span>{user?.stats?.drillsParticipated || 0} completed</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex items-center space-x-2">
+            <Filter className="h-4 w-4 text-gray-500" />
+            <select
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
             >
-              Start Drill
-            </button>
+              <option value="all">All Status</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
           </div>
-        ))}
+
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="all">All Types</option>
+            <option value="evacuation">Evacuation</option>
+            <option value="shelter">Shelter-in-Place</option>
+            <option value="fire">Fire Safety</option>
+            <option value="medical">Medical Emergency</option>
+            <option value="communication">Communication</option>
+          </select>
+        </div>
       </div>
 
-      {/* Drill History */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Drill History</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">🔥</span>
-              <div>
-                <div className="font-medium">Fire Evacuation Drill</div>
-                <div className="text-sm text-gray-500">Completed 2 days ago</div>
-              </div>
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Drills Completed</p>
+              <p className="text-2xl font-bold text-gray-900">{user?.stats?.drillsParticipated || 0}</p>
             </div>
-            <div className="text-right">
-              <div className="font-semibold text-green-600">95%</div>
-              <div className="text-sm text-gray-500">12:30</div>
+            <div className="p-3 rounded-lg bg-green-50 border border-green-200">
+              <Target className="h-6 w-6 text-green-600" />
             </div>
           </div>
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
-            <div className="flex items-center space-x-3">
-              <span className="text-2xl">🌍</span>
-              <div>
-                <div className="font-medium">Earthquake Response Drill</div>
-                <div className="text-sm text-gray-500">Completed 1 week ago</div>
-              </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Active Drills</p>
+              <p className="text-2xl font-bold text-gray-900">{activeDrills.length}</p>
             </div>
-            <div className="text-right">
-              <div className="font-semibold text-green-600">88%</div>
-              <div className="text-sm text-gray-500">18:45</div>
+            <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+              <Clock className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Upcoming Drills</p>
+              <p className="text-2xl font-bold text-gray-900">{upcomingDrills.length}</p>
+            </div>
+            <div className="p-3 rounded-lg bg-yellow-50 border border-yellow-200">
+              <Calendar className="h-6 w-6 text-yellow-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Average Score</p>
+              <p className="text-2xl font-bold text-gray-900">85%</p>
+            </div>
+            <div className="p-3 rounded-lg bg-purple-50 border border-purple-200">
+              <Users className="h-6 w-6 text-purple-600" />
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Drills;
+      {/* Active Drills */}
+      {activeDrills.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Active Drills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeDrills.map((drill) => (
+              <DrillCard key={drill.id} drill={drill} onJoin={handleJoinDrill} onView={handleViewDrill} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Upcoming Drills */}
+      {upcomingDrills.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Upcoming Drills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {upcomingDrills.map((drill) => (
+              <DrillCard key={drill.id} drill={drill} onJoin={handleJoinDrill} onView={handleViewDrill} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Completed Drills */}
+      {completedDrills.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Completed Drills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {completedDrills.map((drill) => (
+              <DrillCard key={drill.id} drill={drill} onJoin={handleJoinDrill} onView={handleViewDrill} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {filteredDrills.length === 0 && (
+        <div className="text-center py-12">
+          <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No drills found</h3>
+          <p className="text-gray-600">Try adjusting your filter criteria.</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default Drills

@@ -1,112 +1,107 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+"use client"
 
-const AuthContext = createContext();
+import { createContext, useContext, useState, useEffect } from "react"
+
+const AuthContext = createContext()
+
+export { AuthContext }
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider")
   }
-  return context;
-};
+  return context
+}
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check if user is logged in on app start
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+    // Check for stored user data on app load
+    const storedUser = localStorage.getItem("user")
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser)
+        setUser(userData)
+      } catch (error) {
+        console.error("Error parsing stored user data:", error)
+        localStorage.removeItem("user")
+      }
     }
-    setLoading(false);
-  }, []);
+    setLoading(false)
+  }, [])
 
-  const login = async (email, password) => {
+  const login = async (credentials) => {
     try {
-      // This would typically make an API call
-      // For now, we'll simulate a successful login
-      const mockUser = {
-        id: '1',
-        name: 'John Doe',
-        email: email,
-        role: 'student',
-        xp: 1250,
-        level: 5
-      };
-      
-      const mockToken = 'mock-jwt-token-' + Date.now();
-      
-      setUser(mockUser);
-      setToken(mockToken);
-      
-      localStorage.setItem('token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      return { success: true, user: mockUser };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  };
+      // Placeholder for API call
+      // const response = await authAPI.login(credentials)
 
-  const signup = async (name, email, password, role) => {
-    try {
-      // This would typically make an API call
-      // For now, we'll simulate a successful signup
+      // Mock login for development with enhanced user data
       const mockUser = {
-        id: Date.now().toString(),
-        name: name,
-        email: email,
-        role: role,
-        xp: 0,
-        level: 1
-      };
-      
-      const mockToken = 'mock-jwt-token-' + Date.now();
-      
-      setUser(mockUser);
-      setToken(mockToken);
-      
-      localStorage.setItem('token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      return { success: true, user: mockUser };
+        id: Math.random().toString(36).substr(2, 9),
+        name: credentials.name || "John Doe",
+        email: credentials.email,
+        role: credentials.role,
+        region: credentials.region || "North",
+        avatar: "/diverse-user-avatars.png",
+        joinedAt: new Date().toISOString(),
+        stats: {
+          modulesCompleted: 0,
+          drillsParticipated: 0,
+          totalXP: 0,
+          level: 1,
+          badges: [],
+        },
+        preferences: {
+          notifications: true,
+          emailAlerts: true,
+          theme: "light",
+        },
+      }
+
+      setUser(mockUser)
+      localStorage.setItem("user", JSON.stringify(mockUser))
+
+      // Simulate API delay
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      return { success: true, user: mockUser }
     } catch (error) {
-      return { success: false, error: error.message };
+      console.error("Login error:", error)
+      return { success: false, error: error.message || "Login failed" }
     }
-  };
+  }
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  };
+    setUser(null)
+    localStorage.removeItem("user")
+  }
 
-  const updateUser = (updatedUser) => {
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-  };
+  const updateUser = (updates) => {
+    const updatedUser = { ...user, ...updates }
+    setUser(updatedUser)
+    localStorage.setItem("user", JSON.stringify(updatedUser))
+  }
+
+  const updateUserStats = (statUpdates) => {
+    const updatedUser = {
+      ...user,
+      stats: { ...user.stats, ...statUpdates },
+    }
+    setUser(updatedUser)
+    localStorage.setItem("user", JSON.stringify(updatedUser))
+  }
 
   const value = {
     user,
-    token,
-    loading,
     login,
-    signup,
     logout,
     updateUser,
-    isAuthenticated: !!user && !!token
-  };
+    updateUserStats,
+    loading,
+  }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}

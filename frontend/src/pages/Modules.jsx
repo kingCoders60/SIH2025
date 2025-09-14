@@ -1,183 +1,172 @@
-import React, { useState, useEffect } from 'react';
-import { modulesAPI } from '../services/api';
-import ModuleCard from '../components/ModuleCard';
+"use client"
+
+import { useState } from "react"
+import { useAuth } from "../context/AuthContext"
+import ModuleCard from "../components/modules/ModuleCard"
+import ModuleViewer from "../components/modules/ModuleViewer"
+import { mockModules } from "../data/mockModules"
+import { Search, BookOpen, Clock, Star } from "lucide-react"
 
 const Modules = () => {
-  const [modules, setModules] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all');
+  const { user, updateUserStats } = useAuth()
+  const [selectedModule, setSelectedModule] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [filterDifficulty, setFilterDifficulty] = useState("all")
+  const [filterRegion, setFilterRegion] = useState("all")
 
-  useEffect(() => {
-    fetchModules();
-  }, []);
+  const handleModuleStart = (module) => {
+    setSelectedModule(module)
+  }
 
-  const fetchModules = async () => {
-    try {
-      setLoading(true);
-      // Mock data for now - replace with actual API call
-      const mockModules = [
-        {
-          id: '1',
-          title: 'Fire Safety Fundamentals',
-          description: 'Learn essential fire safety procedures, prevention tips, and evacuation protocols to protect yourself and others.',
-          category: 'Fire Safety',
-          icon: '🔥',
-          duration: '45 min',
-          difficulty: 'Beginner',
-          progress: 60
-        },
-        {
-          id: '2',
-          title: 'Earthquake Preparedness',
-          description: 'Understand earthquake safety measures, response protocols, and how to prepare for seismic events.',
-          category: 'Earthquake',
-          icon: '🌍',
-          duration: '35 min',
-          difficulty: 'Intermediate',
-          progress: 100
-        },
-        {
-          id: '3',
-          title: 'Flood Response & Safety',
-          description: 'Master flood safety procedures, evacuation routes, and emergency response during flooding events.',
-          category: 'Flood',
-          icon: '🌊',
-          duration: '40 min',
-          difficulty: 'Beginner',
-          progress: 30
-        },
-        {
-          id: '4',
-          title: 'Hurricane Preparedness',
-          description: 'Learn how to prepare for hurricanes, secure your property, and stay safe during severe weather.',
-          category: 'Hurricane',
-          icon: '🌀',
-          duration: '50 min',
-          difficulty: 'Intermediate',
-          progress: 0
-        },
-        {
-          id: '5',
-          title: 'Emergency Communication',
-          description: 'Master emergency communication protocols, radio usage, and coordination during disasters.',
-          category: 'Communication',
-          icon: '📡',
-          duration: '30 min',
-          difficulty: 'Advanced',
-          progress: 80
-        },
-        {
-          id: '6',
-          title: 'First Aid & Medical Response',
-          description: 'Essential first aid skills, medical emergency response, and triage procedures for disaster situations.',
-          category: 'Medical',
-          icon: '🏥',
-          duration: '60 min',
-          difficulty: 'Advanced',
-          progress: 45
-        }
-      ];
-      setModules(mockModules);
-    } catch (error) {
-      console.error('Error fetching modules:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleModuleComplete = (completionData) => {
+    // Update user stats
+    updateUserStats({
+      modulesCompleted: (user?.stats?.modulesCompleted || 0) + 1,
+      totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
+    })
 
-  const categories = ['all', 'Fire Safety', 'Earthquake', 'Flood', 'Hurricane', 'Communication', 'Medical'];
-  
-  const filteredModules = filter === 'all' 
-    ? modules 
-    : modules.filter(module => module.category === filter);
+    // Close module viewer
+    setSelectedModule(null)
+  }
 
-  if (loading) {
+  const filteredModules = mockModules.filter((module) => {
+    const matchesSearch =
+      module.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      module.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesDifficulty = filterDifficulty === "all" || module.difficulty === filterDifficulty
+    const matchesRegion = filterRegion === "all" || module.regions.includes(filterRegion)
+
+    return matchesSearch && matchesDifficulty && matchesRegion
+  })
+
+  if (selectedModule) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="bg-white p-6 rounded-lg shadow">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
-                <div className="h-2 bg-gray-200 rounded w-full"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+      <ModuleViewer module={selectedModule} onClose={() => setSelectedModule(null)} onComplete={handleModuleComplete} />
+    )
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Disaster Education Modules</h1>
-        <p className="text-gray-600">Learn essential disaster preparedness skills through interactive modules</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Education Modules</h1>
+            <p className="text-gray-600">Interactive learning modules tailored for {user?.region} region disasters</p>
+          </div>
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center">
+              <BookOpen className="h-4 w-4 mr-1" />
+              <span>{filteredModules.length} modules</span>
+            </div>
+            <div className="flex items-center">
+              <Clock className="h-4 w-4 mr-1" />
+              <span>
+                {filteredModules.reduce((total, module) => total + Number.parseInt(module.duration), 0)} min total
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search modules..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="flex gap-4">
+            <select
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              value={filterDifficulty}
+              onChange={(e) => setFilterDifficulty(e.target.value)}
+            >
+              <option value="all">All Levels</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+
+            <select
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              value={filterRegion}
+              onChange={(e) => setFilterRegion(e.target.value)}
+            >
+              <option value="all">All Regions</option>
+              <option value="North">North</option>
+              <option value="South">South</option>
+              <option value="East">East</option>
+              <option value="West">West</option>
+              <option value="Central">Central</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="mb-8">
-        <div className="flex flex-wrap gap-2">
-          {categories.map(category => (
-            <button
-              key={category}
-              onClick={() => setFilter(category)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {category === 'all' ? 'All Modules' : category}
-            </button>
-          ))}
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Completed Modules</p>
+              <p className="text-2xl font-bold text-gray-900">{user?.stats?.modulesCompleted || 0}</p>
+            </div>
+            <div className="p-3 rounded-lg bg-green-50 border border-green-200">
+              <BookOpen className="h-6 w-6 text-green-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Learning Time</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {Math.floor(((user?.stats?.modulesCompleted || 0) * 45) / 60)}h{" "}
+                {((user?.stats?.modulesCompleted || 0) * 45) % 60}m
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
+              <Clock className="h-6 w-6 text-blue-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600">Average Score</p>
+              <p className="text-2xl font-bold text-gray-900">87%</p>
+            </div>
+            <div className="p-3 rounded-lg bg-yellow-50 border border-yellow-200">
+              <Star className="h-6 w-6 text-yellow-600" />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Modules Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredModules.map(module => (
-          <ModuleCard key={module.id} module={module} />
+        {filteredModules.map((module) => (
+          <ModuleCard key={module.id} module={module} onStart={handleModuleStart} />
         ))}
       </div>
 
       {filteredModules.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">📚</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No modules found</h3>
-          <p className="text-gray-600">Try selecting a different category or check back later for new content.</p>
+          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No modules found</h3>
+          <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
         </div>
       )}
-
-      {/* Progress Summary */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Learning Progress</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">
-              {modules.filter(m => m.progress === 100).length}
-            </div>
-            <div className="text-sm text-gray-600">Completed</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-600">
-              {modules.filter(m => m.progress > 0 && m.progress < 100).length}
-            </div>
-            <div className="text-sm text-gray-600">In Progress</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-600">
-              {modules.filter(m => m.progress === 0).length}
-            </div>
-            <div className="text-sm text-gray-600">Not Started</div>
-          </div>
-        </div>
-      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modules;
+export default Modules
