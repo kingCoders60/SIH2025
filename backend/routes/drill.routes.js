@@ -1,9 +1,14 @@
 import express from "express";
-import { getUserDrills, createDrill } from "../controllers/drill.controller.js";
+import {
+  createDrill,
+  updateDrillStatus,
+  getUserDrills,
+} from "../controllers/drill.controller.js";
 
 const router = express.Router();
 
-router.get("/", getUserDrills);
 router.post("/", createDrill);
+router.put("/:drillId/status", updateDrillStatus);
+router.get("/user/:userId", getUserDrills);
 
 export default router;
