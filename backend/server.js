@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 import drillRoutes from "./routes/drill.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
@@ -19,6 +20,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/drills", drillRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server Already Running.");

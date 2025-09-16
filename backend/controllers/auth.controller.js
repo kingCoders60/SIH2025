@@ -22,10 +22,13 @@ export const registerUser = async (req, res) => {
     if (existingUser)
       return res.status(400).json({ message: "Email already registered" });
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newUser = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword, // ✅ store hashed password
       region,
       role,
       phone,
