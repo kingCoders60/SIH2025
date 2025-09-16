@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -22,16 +22,16 @@ const userSchema = new mongoose.Schema({
   },
   region: {
     type: String,
-    required:true
+    required: true,
   },
 });
 
 //hasing the pass before save..
-userSchema.pre('save',async function(next){
-    if(!this.isModified('password')) return next();
-    this.passwod = await bcrypt.hash(this.password,10);
-    next();
-})
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.passwod = await bcrypt.hash(this.password, 10);
+  next();
+});
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
