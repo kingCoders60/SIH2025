@@ -90,7 +90,11 @@ cd backend
 npm test
 
 # ML microservice tests
+
+Run the tests using the following command:
+```bash 
 pytest tests/
+
 📁 Folder Structure
 Code
 ├── backend/
@@ -106,3 +110,5 @@ Code
 │   ├── risk_predictor.py
 │   ├── preparedness_score.py
 │   └── gamification_engine.py
+
+```
