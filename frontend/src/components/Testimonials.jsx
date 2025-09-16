@@ -15,8 +15,11 @@ const features = [
 const Testimonials = () => (
   <section className="max-w-7xl mx-auto px-4 py-16">
     <div className="text-center mb-12">
-      <h2 className="text-3xl md:text-4xl font-bold mb-4">What Sets Us Apart</h2>
-      <p className="text-lg text-muted-foreground">Discover the unique features that make our platform the best choice for disaster preparedness.</p>
+      <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Comprehensive Disaster Preparedness</h2>
+      <p className="text-lg text-muted-foreground text-white">
+        Our platform combines education, practice, and community to create the most effective disaster
+        preparedness experience.
+      </p>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {features.map(({ icon: Icon, title, description }, idx) => (
