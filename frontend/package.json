@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-separator": "^1.1.7",
     "@tsparticles/react": "^3.0.0",
     "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",
