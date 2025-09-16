@@ -1,37 +1,37 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext()
+const AuthContext = createContext();
 
-export { AuthContext }
+export { AuthContext };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
-}
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check for stored user data on app load
-    const storedUser = localStorage.getItem("user")
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
-        const userData = JSON.parse(storedUser)
-        setUser(userData)
+        const userData = JSON.parse(storedUser);
+        setUser(userData);
       } catch (error) {
-        console.error("Error parsing stored user data:", error)
-        localStorage.removeItem("user")
+        console.error("Error parsing stored user data:", error);
+        localStorage.removeItem("user");
       }
     }
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   const login = async (credentials) => {
     try {
@@ -59,40 +59,40 @@ export const AuthProvider = ({ children }) => {
           emailAlerts: true,
           theme: "light",
         },
-      }
+      };
 
-      setUser(mockUser)
-      localStorage.setItem("user", JSON.stringify(mockUser))
+      setUser(mockUser);
+      localStorage.setItem("user", JSON.stringify(mockUser));
 
       // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return { success: true, user: mockUser }
+      return { success: true, user: mockUser };
     } catch (error) {
-      console.error("Login error:", error)
-      return { success: false, error: error.message || "Login failed" }
+      console.error("Login error:", error);
+      return { success: false, error: error.message || "Login failed" };
     }
-  }
+  };
 
   const logout = () => {
-    setUser(null)
-    localStorage.removeItem("user")
-  }
+    setUser(null);
+    localStorage.removeItem("user");
+  };
 
   const updateUser = (updates) => {
-    const updatedUser = { ...user, ...updates }
-    setUser(updatedUser)
-    localStorage.setItem("user", JSON.stringify(updatedUser))
-  }
+    const updatedUser = { ...user, ...updates };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
 
   const updateUserStats = (statUpdates) => {
     const updatedUser = {
       ...user,
       stats: { ...user.stats, ...statUpdates },
-    }
-    setUser(updatedUser)
-    localStorage.setItem("user", JSON.stringify(updatedUser))
-  }
+    };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
 
   const value = {
     user,
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     updateUser,
     updateUserStats,
     loading,
-  }
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
