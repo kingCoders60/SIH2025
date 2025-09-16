@@ -9,7 +9,7 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup } = useAuth();
+  const { registerUser } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,12 +19,7 @@ const Signup = () => {
     setError("");
 
     try {
-      const result = await signup(
-        data.name,
-        data.email,
-        data.password,
-        data.role
-      );
+      const result = await register(data);
       if (result.success) {
         navigate("/dashboard");
       } else {
