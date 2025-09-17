@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
 import { Shield, BookOpen, Target, Users, AlertTriangle, Award } from "lucide-react"
+import ShadcnFooter from "../components/ShadcnFooter";
+import Testimonials from "../components/Testimonials";
 
 const Home = () => {
   const features = [
@@ -36,7 +38,7 @@ const Home = () => {
   ]
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,7 +51,7 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/login"
-                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors"
+                className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors text-black"
               >
                 Get Started
               </Link>
@@ -60,9 +62,10 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <Testimonials />
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Comprehensive Disaster Preparedness</h2>
@@ -89,7 +92,7 @@ const Home = () => {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-20 bg-gray-100">
@@ -103,6 +106,7 @@ const Home = () => {
           </Link>
         </div>
       </section>
+      <ShadcnFooter />
     </div>
   )
 }
