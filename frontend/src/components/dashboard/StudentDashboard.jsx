@@ -10,10 +10,19 @@ import { BookOpen, Target, Award, TrendingUp } from "lucide-react";
 const StudentDashboard = () => {
   const { user } = useAuth();
 
+  // Define fallback values for user stats to prevent errors
+  const userStats = user?.stats || {
+    modulesCompleted: 3,
+    drillsParticipated: 5,
+    totalXP: 450,
+    badges: [1, 2],
+    level: 1,
+  };
+
   const stats = [
     {
       title: "Modules Completed",
-      value: user?.stats?.modulesCompleted || 3,
+      value: userStats.modulesCompleted,
       change: "+2 this week",
       changeType: "increase",
       icon: BookOpen,
@@ -21,7 +30,7 @@ const StudentDashboard = () => {
     },
     {
       title: "Drills Participated",
-      value: user?.stats?.drillsParticipated || 5,
+      value: userStats.drillsParticipated,
       change: "+1 this week",
       changeType: "increase",
       icon: Target,
@@ -29,7 +38,7 @@ const StudentDashboard = () => {
     },
     {
       title: "Total XP",
-      value: user?.stats?.totalXP || 450,
+      value: userStats.totalXP,
       change: "+120 this week",
       changeType: "increase",
       icon: TrendingUp,
@@ -37,7 +46,7 @@ const StudentDashboard = () => {
     },
     {
       title: "Badges Earned",
-      value: user?.stats?.badges?.length || 2,
+      value: userStats.badges?.length,
       change: "+1 this month",
       changeType: "increase",
       icon: Award,
@@ -72,40 +81,46 @@ const StudentDashboard = () => {
     },
   ];
 
+  // Calculate progress to the next level
+  const xpForNextLevel = 500;
+  const xpIntoCurrentLevel = userStats.totalXP % xpForNextLevel;
+  const progressPercentage = (xpIntoCurrentLevel / xpForNextLevel) * 100;
+  const xpRemaining = xpForNextLevel - xpIntoCurrentLevel;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 p-4 md:p-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg shadow-md p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h1>
-        <p className="text-primary-100">
-          You're currently Level {user?.stats?.level || 1} with{" "}
-          {user?.stats?.totalXP || 450} XP. Keep learning to level up!
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-lg shadow-xl p-6 md:p-8 text-black">
+        <h1 className="text-2xl md:text-3xl font-bold mb-2 ">
+          Welcome back, {user?.name || "Student"}!
+        </h1>
+        <p className="text-primary-100 text-lg">
+          You're currently Level {userStats.level} with {userStats.totalXP} XP.
+          Keep learning to level up!
         </p>
-        <div className="mt-4 bg-white bg-opacity-20 rounded-full h-2">
+        <div className="mt-4 bg-white bg-opacity-30 rounded-full h-3">
           <div
-            className="bg-white h-2 rounded-full transition-all duration-300"
-            style={{
-              width: `${((user?.stats?.totalXP || 450) % 500) / 5}%`,
-            }}></div>
+            className="bg-white h-3 rounded-full transition-all duration-500 ease-out"
+            style={{ width: `${progressPercentage}%` }}></div>
         </div>
         <p className="text-sm text-primary-100 mt-2">
-          {500 - ((user?.stats?.totalXP || 450) % 500)} XP to next level
+          {xpRemaining} XP to next level
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
         ))}
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Current Modules */}
         <div className="lg:col-span-2 space-y-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">
               Current Modules
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -113,16 +128,14 @@ const StudentDashboard = () => {
                 <ProgressCard
                   key={index}
                   {...module}
-                  onClick={() =>
-                    console.log(`Navigate to module: ${module.title}`)
-                  }
+                  onClick={() => console.log(`Maps to module: ${module.title}`)}
                 />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Sidebar for Quick Actions and Recent Activity */}
         <div className="space-y-6">
           <QuickActions userRole="student" />
           <RecentActivity />
