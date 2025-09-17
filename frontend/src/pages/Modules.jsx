@@ -1,48 +1,54 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useAuth } from "../context/AuthContext"
-import ModuleCard from "../components/modules/ModuleCard"
-import ModuleViewer from "../components/modules/ModuleViewer"
-import { mockModules } from "../data/mockModules"
-import { Search, BookOpen, Clock, Star } from "lucide-react"
+import { useState } from "react";
+import { useAuth } from "../context/AuthProvider";
+import ModuleCard from "../components/modules/ModuleCard";
+import ModuleViewer from "../components/modules/ModuleViewer";
+import { mockModules } from "../data/mockModules";
+import { Search, BookOpen, Clock, Star } from "lucide-react";
 
 const Modules = () => {
-  const { user, updateUserStats } = useAuth()
-  const [selectedModule, setSelectedModule] = useState(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterDifficulty, setFilterDifficulty] = useState("all")
-  const [filterRegion, setFilterRegion] = useState("all")
+  const { user, updateUserStats } = useAuth();
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterDifficulty, setFilterDifficulty] = useState("all");
+  const [filterRegion, setFilterRegion] = useState("all");
 
   const handleModuleStart = (module) => {
-    setSelectedModule(module)
-  }
+    setSelectedModule(module);
+  };
 
   const handleModuleComplete = (completionData) => {
     // Update user stats
     updateUserStats({
       modulesCompleted: (user?.stats?.modulesCompleted || 0) + 1,
       totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
-    })
+    });
 
     // Close module viewer
-    setSelectedModule(null)
-  }
+    setSelectedModule(null);
+  };
 
   const filteredModules = mockModules.filter((module) => {
     const matchesSearch =
       module.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      module.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesDifficulty = filterDifficulty === "all" || module.difficulty === filterDifficulty
-    const matchesRegion = filterRegion === "all" || module.regions.includes(filterRegion)
+      module.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDifficulty =
+      filterDifficulty === "all" || module.difficulty === filterDifficulty;
+    const matchesRegion =
+      filterRegion === "all" || module.regions.includes(filterRegion);
 
-    return matchesSearch && matchesDifficulty && matchesRegion
-  })
+    return matchesSearch && matchesDifficulty && matchesRegion;
+  });
 
   if (selectedModule) {
     return (
-      <ModuleViewer module={selectedModule} onClose={() => setSelectedModule(null)} onComplete={handleModuleComplete} />
-    )
+      <ModuleViewer
+        module={selectedModule}
+        onClose={() => setSelectedModule(null)}
+        onComplete={handleModuleComplete}
+      />
+    );
   }
 
   return (
@@ -51,8 +57,13 @@ const Modules = () => {
       <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Education Modules</h1>
-            <p className="text-gray-600">Interactive learning modules tailored for {user?.region} region disasters</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Education Modules
+            </h1>
+            <p className="text-gray-600">
+              Interactive learning modules tailored for {user?.region} region
+              disasters
+            </p>
           </div>
           <div className="flex items-center space-x-4 text-sm text-gray-500">
             <div className="flex items-center">
@@ -62,7 +73,11 @@ const Modules = () => {
             <div className="flex items-center">
               <Clock className="h-4 w-4 mr-1" />
               <span>
-                {filteredModules.reduce((total, module) => total + Number.parseInt(module.duration), 0)} min total
+                {filteredModules.reduce(
+                  (total, module) => total + Number.parseInt(module.duration),
+                  0
+                )}{" "}
+                min total
               </span>
             </div>
           </div>
@@ -85,8 +100,7 @@ const Modules = () => {
             <select
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               value={filterDifficulty}
-              onChange={(e) => setFilterDifficulty(e.target.value)}
-            >
+              onChange={(e) => setFilterDifficulty(e.target.value)}>
               <option value="all">All Levels</option>
               <option value="beginner">Beginner</option>
               <option value="intermediate">Intermediate</option>
@@ -96,8 +110,7 @@ const Modules = () => {
             <select
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               value={filterRegion}
-              onChange={(e) => setFilterRegion(e.target.value)}
-            >
+              onChange={(e) => setFilterRegion(e.target.value)}>
               <option value="all">All Regions</option>
               <option value="North">North</option>
               <option value="South">South</option>
@@ -114,8 +127,12 @@ const Modules = () => {
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Completed Modules</p>
-              <p className="text-2xl font-bold text-gray-900">{user?.stats?.modulesCompleted || 0}</p>
+              <p className="text-sm font-medium text-gray-600">
+                Completed Modules
+              </p>
+              <p className="text-2xl font-bold text-gray-900">
+                {user?.stats?.modulesCompleted || 0}
+              </p>
             </div>
             <div className="p-3 rounded-lg bg-green-50 border border-green-200">
               <BookOpen className="h-6 w-6 text-green-600" />
@@ -154,19 +171,27 @@ const Modules = () => {
       {/* Modules Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredModules.map((module) => (
-          <ModuleCard key={module.id} module={module} onStart={handleModuleStart} />
+          <ModuleCard
+            key={module.id}
+            module={module}
+            onStart={handleModuleStart}
+          />
         ))}
       </div>
 
       {filteredModules.length === 0 && (
         <div className="text-center py-12">
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No modules found</h3>
-          <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No modules found
+          </h3>
+          <p className="text-gray-600">
+            Try adjusting your search or filter criteria.
+          </p>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Modules
+export default Modules;
