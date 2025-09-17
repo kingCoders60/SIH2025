@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext"
 import { useAuth } from "../context/AuthProvider";
+import {
+  Shield,
+  Menu,
+  X,
+  LogOut,
+  PanelLeft,
+  PanelLeftClose,
+} from "lucide-react";
 
-import { Shield, Menu, X, LogOut } from "lucide-react";
-
-const Navbar = () => {
+const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +27,6 @@ const Navbar = () => {
     <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <Shield className="h-8 w-8 text-primary-600" />
             <span className="text-xl font-bold text-gray-900">
@@ -30,8 +34,18 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
+            {user && (
+              <button
+                onClick={toggleSidebar}
+                className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+                {isSidebarOpen ? (
+                  <PanelLeftClose className="h-6 w-6" />
+                ) : (
+                  <PanelLeft className="h-6 w-6" />
+                )}
+              </button>
+            )}
             {!user ? (
               <>
                 <Link
@@ -74,7 +88,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -88,7 +101,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             {!user ? (
