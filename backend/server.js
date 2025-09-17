@@ -5,15 +5,18 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db.js";
 import drillRoutes from "./routes/drill.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import { config } from "./config/env.js";
+
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
+
 const app = express();
-const alloedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
+const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
 
 app.use(
   cors({
-    origin: alloedOrigins,
+    origin: allowedOrigins,
     credentials: true,
   })
 );

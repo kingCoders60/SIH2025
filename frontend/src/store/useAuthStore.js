@@ -1,35 +1,37 @@
 import { create } from "zustand";
-import { axiosInstance } from "../lib/axios.js";
-import { toast } from "react-hot-toast";
-import axios from "axios";
+import axiosInstance from "../lib/axios.js";
+import toast from "react-hot-toast";
 
-axios.defaults.withCredentials = true;
-
-const BASE_URL =
-  import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
-
-export const useAuthStore = create((set, get) => ({
+export const useAuthStore = create((set) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
-  isCheckingAuth: false,
+  isUpdatingProfile: false,
+  isCheckingAuth: true,
 
-  signup: async (userData) => {
+  checkAuth: async () => {
+    try {
+      const res = await axiosInstance.get("/auth/check");
+      console.log("Auth check response:", res.data);
+      set({ authUser: res.data.user }); // ✅ assumes backend returns { user }
+    } catch (error) {
+      console.error("Error in checkAuth:", error);
+      set({ authUser: null });
+    } finally {
+      set({ isCheckingAuth: false });
+    }
+  },
+
+  signup: async (data) => {
     set({ isSigningUp: true });
     try {
-      const res = await axios.post(`${BASE_URL}/api/auth/signup`, userData, {
-        withCredentials: true,
-      });
-
-      set({ authUser: res.data }); // Update global user state
-      toast.success("Signup successfull");
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-      window.location.reload();
+      const res = await axiosInstance.post("/auth/signup", data);
+      console.log("Signup response:", res.data);
+      set({ authUser: res.data.user }); // ✅ assumes backend returns { user, token }
+      toast.success("Account created successfully");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Signup failed");
+      const message = error.response?.data?.message || "Signup failed";
+      toast.error(message);
       console.error("Signup error:", error);
     } finally {
       set({ isSigningUp: false });
@@ -40,11 +42,13 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
-      set({ authUser: res.data });
+      console.log("Login response:", res.data);
+      set({ authUser: res.data.user }); // ✅ consistent shape
       toast.success("Logged in successfully");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Login failed");
-      console.log("Error in Login As User Not Existed.");
+      const message = error.response?.data?.message || "Login failed";
+      toast.error(message);
+      console.error("Login error:", error);
     } finally {
       set({ isLoggingIn: false });
     }
@@ -55,21 +59,26 @@ export const useAuthStore = create((set, get) => ({
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
       toast.success("Logged out successfully");
-      get().disconnectSocket?.();
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Logout failed");
+      const message = error.response?.data?.message || "Logout failed";
+      toast.error(message);
+      console.error("Logout error:", error);
     }
   },
 
-  checkAuth: async () => {
-    set({ isCheckingAuth: true });
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true });
     try {
-      const res = await axiosInstance.get("/auth/check");
-      set({ authUser: res.data });
-    } catch {
-      set({ authUser: null });
+      const res = await axiosInstance.put("/auth/update-profile", data);
+      console.log("Update profile response:", res.data);
+      set({ authUser: res.data.user }); // ✅ consistent shape
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      const message = error.response?.data?.message || "Update failed";
+      toast.error(message);
+      console.error("Update profile error:", error);
     } finally {
-      set({ isCheckingAuth: false });
+      set({ isUpdatingProfile: false });
     }
   },
 }));
