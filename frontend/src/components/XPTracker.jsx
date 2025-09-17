@@ -1,27 +1,29 @@
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
+import React from "react";
+// import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthProvider";
 
-const XPTracker = ({ size = 'default' }) => {
+const XPTracker = ({ size = "default" }) => {
   const { user } = useAuth();
-  
+
   const xp = user?.xp || 0;
   const level = user?.level || 1;
-  
+
   // Calculate XP needed for next level (simple formula: level * 1000)
   const xpForCurrentLevel = (level - 1) * 1000;
   const xpForNextLevel = level * 1000;
-  const xpProgress = ((xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100;
+  const xpProgress =
+    ((xp - xpForCurrentLevel) / (xpForNextLevel - xpForCurrentLevel)) * 100;
 
   const sizeClasses = {
-    small: 'text-sm',
-    default: 'text-base',
-    large: 'text-lg'
+    small: "text-sm",
+    default: "text-base",
+    large: "text-lg",
   };
 
   const containerClasses = {
-    small: 'p-2',
-    default: 'p-3',
-    large: 'p-4'
+    small: "p-2",
+    default: "p-3",
+    large: "p-4",
   };
 
   return (
@@ -44,15 +46,14 @@ const XPTracker = ({ size = 'default' }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
+        <div
           className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
-          style={{ width: `${Math.min(xpProgress, 100)}%` }}
-        ></div>
+          style={{ width: `${Math.min(xpProgress, 100)}%` }}></div>
       </div>
-      
-      {size !== 'small' && (
+
+      {size !== "small" && (
         <div className="mt-2 text-xs text-gray-500 text-center">
           {xp - xpForCurrentLevel} / {xpForNextLevel - xpForCurrentLevel} XP
         </div>

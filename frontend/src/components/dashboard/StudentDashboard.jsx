@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthProvider";
 import StatCard from "./StatCard";
 import ProgressCard from "./ProgressCard";
 import QuickActions from "./QuickActions";

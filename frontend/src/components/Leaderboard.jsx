@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { gamificationAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import React, { useState, useEffect } from "react";
+import { gamificationAPI } from "../services/api";
+// import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthProvider";
 
 const Leaderboard = () => {
   const { user } = useAuth();
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('global');
-  const [timeframe, setTimeframe] = useState('all');
+  const [filter, setFilter] = useState("global");
+  const [timeframe, setTimeframe] = useState("all");
 
   useEffect(() => {
     fetchLeaderboard();
@@ -19,74 +20,74 @@ const Leaderboard = () => {
       // Mock data for now - replace with actual API call
       const mockLeaderboard = [
         {
-          id: '1',
-          name: 'Sarah Johnson',
+          id: "1",
+          name: "Sarah Johnson",
           xp: 2850,
           level: 8,
-          avatar: 'SJ',
-          role: 'student',
-          region: 'North',
-          class: 'Class A',
+          avatar: "SJ",
+          role: "student",
+          region: "North",
+          class: "Class A",
           badges: 12,
           modulesCompleted: 8,
-          drillsCompleted: 15
+          drillsCompleted: 15,
         },
         {
-          id: '2',
-          name: 'Mike Chen',
+          id: "2",
+          name: "Mike Chen",
           xp: 2720,
           level: 7,
-          avatar: 'MC',
-          role: 'student',
-          region: 'South',
-          class: 'Class B',
+          avatar: "MC",
+          role: "student",
+          region: "South",
+          class: "Class B",
           badges: 10,
           modulesCompleted: 7,
-          drillsCompleted: 12
+          drillsCompleted: 12,
         },
         {
-          id: '3',
-          name: 'Emma Davis',
+          id: "3",
+          name: "Emma Davis",
           xp: 2650,
           level: 7,
-          avatar: 'ED',
-          role: 'student',
-          region: 'East',
-          class: 'Class A',
+          avatar: "ED",
+          role: "student",
+          region: "East",
+          class: "Class A",
           badges: 9,
           modulesCompleted: 6,
-          drillsCompleted: 14
+          drillsCompleted: 14,
         },
         {
-          id: '4',
-          name: 'Alex Rodriguez',
+          id: "4",
+          name: "Alex Rodriguez",
           xp: 2580,
           level: 6,
-          avatar: 'AR',
-          role: 'student',
-          region: 'West',
-          class: 'Class C',
+          avatar: "AR",
+          role: "student",
+          region: "West",
+          class: "Class C",
           badges: 8,
           modulesCompleted: 5,
-          drillsCompleted: 11
+          drillsCompleted: 11,
         },
         {
-          id: '5',
-          name: 'Lisa Wang',
+          id: "5",
+          name: "Lisa Wang",
           xp: 2450,
           level: 6,
-          avatar: 'LW',
-          role: 'student',
-          region: 'North',
-          class: 'Class B',
+          avatar: "LW",
+          role: "student",
+          region: "North",
+          class: "Class B",
           badges: 7,
           modulesCompleted: 4,
-          drillsCompleted: 10
-        }
+          drillsCompleted: 10,
+        },
       ];
       setLeaderboard(mockLeaderboard);
     } catch (error) {
-      console.error('Error fetching leaderboard:', error);
+      console.error("Error fetching leaderboard:", error);
     } finally {
       setLoading(false);
     }
@@ -94,23 +95,32 @@ const Leaderboard = () => {
 
   const getRankIcon = (index) => {
     switch (index) {
-      case 0: return '🥇';
-      case 1: return '🥈';
-      case 2: return '🥉';
-      default: return `#${index + 1}`;
+      case 0:
+        return "🥇";
+      case 1:
+        return "🥈";
+      case 2:
+        return "🥉";
+      default:
+        return `#${index + 1}`;
     }
   };
 
   const getRankColor = (index) => {
     switch (index) {
-      case 0: return 'bg-yellow-100 border-yellow-300';
-      case 1: return 'bg-gray-100 border-gray-300';
-      case 2: return 'bg-orange-100 border-orange-300';
-      default: return 'bg-white border-gray-200';
+      case 0:
+        return "bg-yellow-100 border-yellow-300";
+      case 1:
+        return "bg-gray-100 border-gray-300";
+      case 2:
+        return "bg-orange-100 border-orange-300";
+      default:
+        return "bg-white border-gray-200";
     }
   };
 
-  const currentUserRank = leaderboard.findIndex(entry => entry.id === user?.id) + 1;
+  const currentUserRank =
+    leaderboard.findIndex((entry) => entry.id === user?.id) + 1;
 
   if (loading) {
     return (
@@ -118,7 +128,7 @@ const Leaderboard = () => {
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
           <div className="space-y-4">
-            {[1, 2, 3, 4, 5].map(i => (
+            {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="bg-white p-4 rounded-lg shadow">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
@@ -146,26 +156,28 @@ const Leaderboard = () => {
       {/* Filters */}
       <div className="mb-6 flex flex-wrap gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Filter by:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Filter by:
+          </label>
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="global">Global</option>
             <option value="class">Class</option>
             <option value="region">Region</option>
             <option value="role">Role</option>
           </select>
         </div>
-        
+
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Timeframe:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Timeframe:
+          </label>
           <select
             value={timeframe}
             onChange={(e) => setTimeframe(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="all">All Time</option>
             <option value="month">This Month</option>
             <option value="week">This Week</option>
@@ -197,13 +209,12 @@ const Leaderboard = () => {
             Top Performers
           </h2>
         </div>
-        
+
         <div className="divide-y divide-gray-200">
           {leaderboard.map((entry, index) => (
             <div
               key={entry.id}
-              className={`p-6 border-l-4 ${getRankColor(index)}`}
-            >
+              className={`p-6 border-l-4 ${getRankColor(index)}`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-3">
@@ -216,7 +227,7 @@ const Leaderboard = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
                       {entry.name}
@@ -236,13 +247,14 @@ const Leaderboard = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   <div className="text-2xl font-bold text-gray-900">
                     {entry.xp.toLocaleString()} XP
                   </div>
                   <div className="text-sm text-gray-600">
-                    {entry.badges} badges • {entry.modulesCompleted} modules • {entry.drillsCompleted} drills
+                    {entry.badges} badges • {entry.modulesCompleted} modules •{" "}
+                    {entry.drillsCompleted} drills
                   </div>
                 </div>
               </div>
@@ -254,19 +266,30 @@ const Leaderboard = () => {
       {/* Stats Summary */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Total Participants</h3>
-          <div className="text-3xl font-bold text-blue-600">{leaderboard.length}</div>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Average XP</h3>
-          <div className="text-3xl font-bold text-green-600">
-            {Math.round(leaderboard.reduce((sum, entry) => sum + entry.xp, 0) / leaderboard.length).toLocaleString()}
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Total Participants
+          </h3>
+          <div className="text-3xl font-bold text-blue-600">
+            {leaderboard.length}
           </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Top Level</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Average XP
+          </h3>
+          <div className="text-3xl font-bold text-green-600">
+            {Math.round(
+              leaderboard.reduce((sum, entry) => sum + entry.xp, 0) /
+                leaderboard.length
+            ).toLocaleString()}
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Top Level
+          </h3>
           <div className="text-3xl font-bold text-purple-600">
-            {Math.max(...leaderboard.map(entry => entry.level))}
+            {Math.max(...leaderboard.map((entry) => entry.level))}
           </div>
         </div>
       </div>
