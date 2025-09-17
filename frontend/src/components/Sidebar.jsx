@@ -58,39 +58,52 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-1/2 left-0 z-50 transform -translate-y-1/2 p-2 bg-primary-600 text-white rounded-r-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform duration-300">
-        {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
-      </button>
-
-      {/* Slidable Sidebar */}
+      {/* Narrow hover zone to trigger sidebar open */}
       <div
-        className={`fixed left-0 top-0 h-screen w-64 bg-white shadow-lg border-r border-gray-200 overflow-y-auto transform transition-transform duration-300 ease-in-out z-40
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="p-4 pt-16">
-          <nav className="space-y-2">
-            {filteredNavigation.map((item) => {
-              const isActive = location.pathname === item.href;
-              const Icon = item.icon;
+        className="fixed top-0 left-0 h-screen w-4 z-50"
+        onMouseEnter={() => setIsOpen(true)}
+      />
 
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-primary-100 text-primary-700 border-r-2 border-primary-600"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}>
-                  <Icon className="h-5 w-5" />
-                  <span className="font-medium">{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
+      {/* Sidebar container */}
+      <div
+        className="fixed left-0 top-0 h-screen w-64 z-40 transition-transform duration-300 ease-in-out"
+        onMouseLeave={() => setIsOpen(false)}>
+        {/* Toggle Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`fixed top-1/2 p-2 bg-primary-600 text-white rounded-r-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-transform duration-300 transform -translate-y-1/2 ${
+            isOpen ? "left-64" : "left-0"
+          } z-50`}>
+          {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+        </button>
+
+        {/* Slidable Sidebar */}
+        <div
+          className={`h-full bg-white shadow-lg border-r border-gray-200 overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}>
+          <div className="p-4 pt-16">
+            <nav className="space-y-2">
+              {filteredNavigation.map((item) => {
+                const isActive = location.pathname === item.href;
+                const Icon = item.icon;
+
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                      isActive
+                        ? "bg-primary-100 text-primary-700 border-r-2 border-primary-600"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`}>
+                    <Icon className="h-5 w-5" />
+                    <span className="font-medium">{item.name}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
         </div>
       </div>
     </>

@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import AnimatedBackground from "./components/AnimatedBackground";
-
+import { ThemeProvider } from "./context/ThemeContext";
 // Import pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -72,113 +72,115 @@ function App() {
   return (
     <div className="app-wrapper">
       <AnimatedBackground />
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
+      <ThemeProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
 
-        {/* Auth routes */}
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
-            )
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <AuthLayout>
-                <Signup />
-              </AuthLayout>
-            )
-          }
-        />
+          {/* Auth routes */}
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <AuthLayout>
+                  <Login />
+                </AuthLayout>
+              )
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <AuthLayout>
+                  <Signup />
+                </AuthLayout>
+              )
+            }
+          />
 
-        {/* Protected routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/modules"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Modules />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/modules/:id"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <ModuleDetails />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/drills"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Drills />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/alerts"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Alerts />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/leaderboard"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <Leaderboard />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/modules"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Modules />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/modules/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ModuleDetails />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/drills"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Drills />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/alerts"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Alerts />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Leaderboard />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Admin only routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute adminOnly={true}>
-              <Layout>
-                <AdminPanel />
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
+          {/* Admin only routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <Layout>
+                  <AdminPanel />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Catch all route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </ThemeProvider>
     </div>
   );
 }
