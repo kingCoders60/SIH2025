@@ -9,14 +9,14 @@ const generateToken = (user) => {
       role: user.role,
       region: user.region,
     },
-    process.env.SECRET,
+    process.env.SECRET_PRIVATE_KEY,
     { expiresIn: "7d" }
   );
 };
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, region, role, phone, code } = req.body;
+    const { name, email, password, region, role } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -28,15 +28,14 @@ export const registerUser = async (req, res) => {
     const newUser = await User.create({
       name,
       email,
-      password: hashedPassword, // ✅ store hashed password
+      password: hashedPassword,
       region,
       role,
-      phone,
-      code,
     });
 
     const token = generateToken(newUser);
-
+    // console.log("Signup payload:", data);
+    console.log("Incoming signup data:", req.body);
     res.status(201).json({ user: newUser, token });
   } catch (error) {
     res.status(500).json({
@@ -66,5 +65,26 @@ export const loginUser = async (req, res) => {
       message: "Login Failed",
       error: error.message,
     });
+  }
+};
+export const logout = (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({
+      message: "Logged Out Successfully!",
+    });
+  } catch (error) {
+    console.log("Error in logout Controller", error);
+    res.status(500).json({
+      message: "Internal Server Error!",
+    });
+  }
+};
+export const checkAuth = (req, res) => {
+  try {
+    res.status(200).json(req.user);
+  } catch (error) {
+    console.log("Error in checkAuth controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
