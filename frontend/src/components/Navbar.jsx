@@ -22,15 +22,27 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
     <nav className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <Shield className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              DisasterPrep
-            </span>
-          </Link>
+          {/* Logo + Hackathon Link */}
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="flex items-center space-x-2">
+              <Shield className="h-8 w-8 text-primary-600" />
+              <span className="text-xl font-bold text-gray-900 dark:text-white">
+                DisasterPrep
+              </span>
+            </Link>
+            <a
+              href="https://opportunitycell.com/smart-india-hackathon-2022/"
+              target="_blank"
+              rel="noopener noreferrer">
+              <img
+                src="/sih25.png"
+                alt="Smart India Hackathon 2022"
+                className="h-8 w-auto"
+              />
+            </a>
+          </div>
 
           <div className="hidden md:flex items-center space-x-8">
-            {/* Dark mode toggle */}
             <button
               onClick={toggleDarkMode}
               className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -60,13 +72,11 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   Dashboard
                 </Link>
 
-                {user.role === "student" && (
-                  <a
-                    href="tel:112"
-                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200">
-                    🚨 Emergency Call
-                  </a>
-                )}
+                <a
+                  href="tel:+911124363260"
+                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200">
+                  🚨 Emergency Call
+                </a>
 
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
@@ -151,21 +161,26 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   </div>
                 </div>
 
-                {user.role === "student" && (
-                  <a
-                    href="tel:112"
-                    className="block px-4 py-2 text-white bg-red-600 rounded-lg text-center font-semibold hover:bg-red-700 transition"
-                    onClick={() => setIsMenuOpen(false)}>
-                    🚨 Emergency Call
-                  </a>
-                )}
+                <a
+                  href="tel:+911124363260"
+                  className="block px-4 py-2 text-white bg-red-600 rounded-lg text-center font-semibold hover:bg-red-700 transition"
+                  onClick={() => setIsMenuOpen(false)}>
+                  🚨 Emergency Call
+                </a>
 
+                <Link
+                  to="/"
+                  className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  onClick={() => setIsMenuOpen(false)}>
+                  Home
+                </Link>
                 <Link
                   to="/dashboard"
                   className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
                   onClick={() => setIsMenuOpen(false)}>
                   Dashboard
                 </Link>
+
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg">
