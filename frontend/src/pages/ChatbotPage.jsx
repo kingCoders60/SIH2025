@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { Send } from "lucide-react";
+import { Send, Bot, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const initialMessages = [
   {
@@ -47,12 +48,36 @@ const ChatbotPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-2 py-8">
-      <Card className="w-full max-w-xl flex flex-col h-[70vh]">
-        <CardHeader className="border-b pb-4">
-          <CardTitle className="text-2xl">Gemini AI Assistant</CardTitle>
-          <CardDescription>Your friendly disaster preparedness expert</CardDescription>
-        </CardHeader>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="w-full max-w-7xl mx-auto flex flex-col flex-1">
+        {/* Top Navigation Bar */}
+        <div className="bg-white border-b px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Link to="/" className="text-gray-600 hover:text-gray-900">
+              <ArrowLeft className="w-6 h-6" />
+            </Link>
+            <div className="flex items-center gap-3 ml-2">
+              <div className="bg-blue-100 p-2 rounded-lg">
+                <Bot className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-gray-900">AI Assistant</h1>
+                <p className="text-sm text-gray-500">Your disaster preparedness expert</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Container */}
+        <div className="flex-1 flex justify-center p-4 md:p-8">
+          <Card className="w-full max-w-4xl flex flex-col h-full bg-white/50 backdrop-blur-sm">
+            <CardHeader className="border-b pb-4 bg-white">
+              <CardTitle className="flex items-center gap-2">
+                <span className="text-blue-600 animate-pulse">•</span>
+                AI Assistant Online
+              </CardTitle>
+              <CardDescription>Ask me anything about disaster preparedness and safety</CardDescription>
+            </CardHeader>
         <CardContent className="flex-1 overflow-y-auto py-4 px-2" style={{ scrollbarWidth: "thin" }}>
           <div className="flex flex-col gap-4">
             <AnimatePresence>
@@ -77,22 +102,30 @@ const ChatbotPage = () => {
             <div ref={messagesEndRef} />
           </div>
         </CardContent>
-        <CardFooter className="border-t pt-4">
+        <CardFooter className="border-t pt-4 bg-white">
           <form className="flex w-full gap-2" onSubmit={handleSubmit} autoComplete="off">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1"
+              className="flex-1 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
               autoFocus
             />
-            <Button type="submit" variant="primary" size="icon" aria-label="Send">
+            <Button 
+              type="submit" 
+              variant="primary" 
+              size="icon" 
+              aria-label="Send"
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20"
+            >
               <Send className="w-5 h-5" />
             </Button>
           </form>
         </CardFooter>
       </Card>
     </div>
+  </div>
+</div>
   );
 };
 
