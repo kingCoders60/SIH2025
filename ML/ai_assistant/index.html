@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chat-container {
+      width: 400px;
+      height: 600px;
+      background: #fff;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    .chat-header {
+      background: #6a0dad;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .chat-box {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      line-height: 1.4;
+      font-size: 14px;
+    }
+    .bot {
+      background: #eee;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user {
+      background: #6a0dad;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+    .chat-input button {
+      background: #6a0dad;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .thinking {
+      font-style: italic;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">🤖 AI ASSISTANT</div>
+    <div class="chat-box" id="chatbox">
+      <div class="message bot">Hey there 👋 How can I help you today?</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="message" placeholder="Message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("message");
+      const chatbox = document.getElementById("chatbox");
+      const message = input.value.trim();
+      if (!message) return;
+
+      // User message
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.innerText = message;
+      chatbox.appendChild(userMsg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+      input.value = "";
+
+      // Bot thinking message
+      const thinkingMsg = document.createElement("div");
+      thinkingMsg.className = "message bot thinking";
+      thinkingMsg.innerText = "Thinking...";
+      chatbox.appendChild(thinkingMsg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Simulated server reply
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+      const data = await response.json();
+
+      // Remove thinking message
+      chatbox.removeChild(thinkingMsg);
+
+      // Bot reply
+      const botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+      botMsg.innerText = data.reply;
+      chatbox.appendChild(botMsg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
+
+
