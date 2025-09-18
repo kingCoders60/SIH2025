@@ -17,6 +17,8 @@ import Drills from "./pages/Drills";
 import Alerts from "./pages/Alerts";
 import AdminPanel from "./pages/AdminPanel";
 import Leaderboard from "./components/Leaderboard";
+import FloatingAiIcon from './components/FloatingAiIcon';
+
 
 // Protected Route component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -181,6 +183,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </ThemeProvider>
+      <FloatingAiIcon />
     </div>
   );
 }
