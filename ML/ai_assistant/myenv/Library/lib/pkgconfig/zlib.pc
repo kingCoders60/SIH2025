@@ -1,0 +1,13 @@
+prefix=C:/Users/KIIT0001/Documents/SIH/SIH2025/ML/ai_assistant/myenv/Library
+exec_prefix=C:/Users/KIIT0001/Documents/SIH/SIH2025/ML/ai_assistant/myenv/Library
+libdir=C:/Users/KIIT0001/Documents/SIH/SIH2025/ML/ai_assistant/myenv/Library/lib
+sharedlibdir=C:/Users/KIIT0001/Documents/SIH/SIH2025/ML/ai_assistant/myenv/Library/lib
+includedir=C:/Users/KIIT0001/Documents/SIH/SIH2025/ML/ai_assistant/myenv/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.3.1
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
