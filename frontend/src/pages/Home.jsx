@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { Shield, BookOpen, Target, Users, AlertTriangle, Award } from "lucide-react"
 import ShadcnFooter from "../components/ShadcnFooter";
 import Testimonials from "../components/Testimonials";
+// import FloatingAiIcon from "../components/FloatingAiIcon";
 
 const Home = () => {
   const features = [
@@ -39,6 +40,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* <FloatingAiIcon /> */}
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
