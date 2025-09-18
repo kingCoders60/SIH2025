@@ -95,8 +95,11 @@ const Drills = () => {
   useEffect(() => {
     const fetchDrills = async () => {
       try {
-        const res = await axios.get(`/api/drills/user/${user._id}`);
-        setDrills(res.data);
+        // const { data } = await axios.get(`/api/drills/user/${user._id}`);
+        const { data } = await axios.get(
+          `http://localhost:5001/api/v1/drills/user/${user._id}`
+        );
+        setDrills(data);
       } catch (err) {
         console.error("Failed to fetch drills from API. Using mock data.", err);
         setDrills(mockDrills);
@@ -104,6 +107,7 @@ const Drills = () => {
         setLoading(false);
       }
     };
+
     if (user?._id) {
       fetchDrills();
     } else {
