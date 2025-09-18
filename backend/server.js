@@ -12,6 +12,7 @@ dotenv.config();
 import fetchIMDAlerts from "./cron/fetchIMDAlerts.js";
 import fetchNDMAAlerts from "./cron/fetchNDMAAlerts.js";
 const PORT = process.env.PORT || 5001;
+import gamificationRoutes from "./routes/gamification.routes.js";
 
 const app = express();
 const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use("/api/drills", drillRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/alerts", alertRoutes);
-
+app.use("/api/gamification", gamificationRoutes);
 app.get("/", (req, res) => {
   res.send("Server Already Running.");
 });

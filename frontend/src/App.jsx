@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuthStore } from "./store/useAuthStore"; // ✅ use Zustand directly
+import { useAuthStore } from "./store/useAuthStore";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import AnimatedBackground from "./components/AnimatedBackground";
 import { ThemeProvider } from "./context/ThemeContext";
-// Import pages
+
+// Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -16,28 +17,25 @@ import ModuleDetails from "./pages/ModuleDetails";
 import Drills from "./pages/Drills";
 import Alerts from "./pages/Alerts";
 import AdminPanel from "./pages/AdminPanel";
+import ChatbotPage from "./pages/ChatbotPage";
+import Gamification from "./pages/Gamification"; // ✅ Added
+
+// Components
 import Leaderboard from "./components/Leaderboard";
-import FloatingAiIcon from './components/FloatingAiIcon';
-import ChatbotPage from "./pages/ChatbotPage"; 
+import FloatingAiIcon from "./components/FloatingAiIcon";
 
-
-// Protected Route component
+// Protected Route
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { authUser } = useAuthStore();
   const isAuthenticated = !!authUser;
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (adminOnly && authUser?.role !== "admin") {
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (adminOnly && authUser?.role !== "admin")
     return <Navigate to="/dashboard" replace />;
-  }
-
   return children;
 };
 
-// Layout component for pages with navbar and sidebar
+// Layouts
 const Layout = ({ children }) => (
   <div className="min-h-screen bg-background/80 backdrop-blur-sm">
     <Navbar />
@@ -49,7 +47,6 @@ const Layout = ({ children }) => (
   </div>
 );
 
-// Layout for auth pages (no navbar/sidebar)
 const AuthLayout = ({ children }) => (
   <div className="min-h-screen bg-background/80 backdrop-blur-sm">
     {children}
@@ -61,7 +58,7 @@ function App() {
   const isAuthenticated = !!authUser;
 
   useEffect(() => {
-    checkAuth(); // ✅ restore auth state on refresh
+    checkAuth();
   }, []);
 
   if (isCheckingAuth) {
@@ -77,11 +74,11 @@ function App() {
       <AnimatedBackground />
       <ThemeProvider>
         <Routes>
-          {/* Public routes */}
+          {/* Public */}
           <Route path="/" element={<Home />} />
-          <Route path='/chatbot' element={<ChatbotPage />} />
+          <Route path="/chatbot" element={<ChatbotPage />} />
 
-          {/* Auth routes */}
+          {/* Auth */}
           <Route
             path="/login"
             element={
@@ -107,7 +104,7 @@ function App() {
             }
           />
 
-          {/* Protected routes */}
+          {/* Protected */}
           <Route
             path="/dashboard"
             element={
@@ -168,8 +165,18 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/gamification"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Gamification />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Admin only routes */}
+          {/* Admin */}
           <Route
             path="/admin"
             element={
@@ -181,7 +188,7 @@ function App() {
             }
           />
 
-          {/* Catch all route */}
+          {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </ThemeProvider>
