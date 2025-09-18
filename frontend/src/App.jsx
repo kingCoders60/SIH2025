@@ -18,6 +18,7 @@ import Alerts from "./pages/Alerts";
 import AdminPanel from "./pages/AdminPanel";
 import Leaderboard from "./components/Leaderboard";
 import FloatingAiIcon from './components/FloatingAiIcon';
+import ChatbotPage from "./pages/ChatbotPage"; 
 
 
 // Protected Route component
@@ -78,6 +79,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
+          <Route path='/chatbot' element={<ChatbotPage />} />
 
           {/* Auth routes */}
           <Route
