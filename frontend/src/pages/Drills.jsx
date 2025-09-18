@@ -10,6 +10,22 @@ import { mockDrills } from "../data/mockDrills";
 import { Target, Clock, Users, Filter, Calendar, Loader, AlertCircle, Award, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
+// Small interactive icon component
+const SmallIcon = ({ icon: Icon, className = "", animate = true }) => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      animate={animate ? {
+        rotate: [0, -5, 5, -5, 0],
+        transition: { duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+      } : {}}
+    >
+      <Icon className={`transition-colors duration-200 ${className}`} />
+    </motion.div>
+  );
+};
+
 // Interactive icon component
 const InteractiveIcon = ({ icon: Icon, color, text, onClick, className }) => {
   return (
@@ -82,29 +98,66 @@ const Drills = () => {
   }, [user]);
 
   // Only run filter logic when data is not loading
+  console.log('Current drills:', drills); // Debug log
+
   const filteredDrills = loading
     ? []
     : drills.filter((drill) => {
         const matchesStatus =
-          filterStatus === "all" || drill.status === filterStatus;
-        const matchesType = filterType === "all" || drill.type === filterType;
+          filterStatus === "all" || 
+          drill.status.toLowerCase() === filterStatus.toLowerCase();
+        const matchesType = 
+          filterType === "all" || 
+          drill.type.toLowerCase() === filterType.toLowerCase();
         return matchesStatus && matchesType;
       });
 
   const upcomingDrills = filteredDrills.filter(
-    (drill) => drill.status === "upcoming"
+    (drill) => drill.status.toLowerCase() === "upcoming"
   );
   const activeDrills = filteredDrills.filter(
-    (drill) => drill.status === "active"
+    (drill) => drill.status.toLowerCase() === "active"
   );
   const completedDrills = filteredDrills.filter(
-    (drill) => drill.status === "completed"
+    (drill) => drill.status.toLowerCase() === "completed"
   );
+
+  // Debug logs
+  console.log('Filtered drills:', {
+    all: filteredDrills.length,
+    upcoming: upcomingDrills.length,
+    active: activeDrills.length,
+    completed: completedDrills.length
+  });
 
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-white text-gray-500">
-        <Loader className="animate-spin mr-2" /> Loading drills...
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 360]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <Loader className="mr-2 text-primary-500" />
+        </motion.div>
+        <motion.span
+          animate={{
+            opacity: [1, 0.5, 1]
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          Loading drills...
+        </motion.span>
       </div>
     );
   }
@@ -137,22 +190,36 @@ const Drills = () => {
           </h1>
           <p className="text-gray-600 mb-4">{viewingDrill.description}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="flex items-center text-sm text-gray-500">
-              <Clock className="h-4 w-4 mr-2" />
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
+          >
+            <motion.div 
+              className="flex items-center text-sm text-gray-500"
+              whileHover={{ scale: 1.05, x: 5 }}
+            >
+              <SmallIcon icon={Clock} className="h-4 w-4 mr-2 text-blue-500" />
               <span>{viewingDrill.duration}</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-500">
-              <Users className="h-4 w-4 mr-2" />
+            </motion.div>
+            <motion.div 
+              className="flex items-center text-sm text-gray-500"
+              whileHover={{ scale: 1.05, x: 5 }}
+            >
+              <SmallIcon icon={Users} className="h-4 w-4 mr-2 text-green-500" />
               <span>{viewingDrill.participants} participants</span>
-            </div>
-            <div className="flex items-center text-sm text-gray-500">
-              <Target className="h-4 w-4 mr-2" />
+            </motion.div>
+            <motion.div 
+              className="flex items-center text-sm text-gray-500"
+              whileHover={{ scale: 1.05, x: 5 }}
+            >
+              <SmallIcon icon={Target} className="h-4 w-4 mr-2 text-purple-500" />
               <span className="capitalize">
                 {viewingDrill.difficulty} difficulty
               </span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <h3 className="font-semibold text-blue-900 mb-2">
@@ -191,16 +258,27 @@ const Drills = () => {
               Practice emergency procedures with realistic simulations
             </p>
           </div>
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <div className="flex items-center">
-              <Target className="h-4 w-4 mr-1" />
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center space-x-4 text-sm text-gray-500"
+          >
+            <motion.div 
+              className="flex items-center"
+              whileHover={{ scale: 1.05 }}
+            >
+              <SmallIcon icon={Target} className="h-4 w-4 mr-1 text-primary-500" />
               <span>{filteredDrills.length} drills</span>
-            </div>
-            <div className="flex items-center">
-              <Users className="h-4 w-4 mr-1" />
+            </motion.div>
+            <motion.div 
+              className="flex items-center"
+              whileHover={{ scale: 1.05 }}
+            >
+              <SmallIcon icon={Users} className="h-4 w-4 mr-1 text-primary-500" />
               <span>{user?.stats?.drillsParticipated || 0} completed</span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -332,9 +410,13 @@ const Drills = () => {
         </div>
       )}
       {completedDrills.length > 0 && (
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Completed Drills
+            Completed Drills ({completedDrills.length})
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {completedDrills.map((drill) => (
@@ -346,7 +428,7 @@ const Drills = () => {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
       {filteredDrills.length === 0 && (
         <motion.div 
