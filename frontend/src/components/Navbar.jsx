@@ -60,7 +60,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   Dashboard
                 </Link>
 
-                {/* 🚨 Emergency Call Button for Students */}
                 {user.role === "student" && (
                   <a
                     href="tel:112"
@@ -93,7 +92,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             )}
           </div>
 
-          {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center space-x-4">
             <button
               onClick={toggleDarkMode}
@@ -116,7 +114,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4">
             {!user ? (
@@ -154,7 +151,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   </div>
                 </div>
 
-                {/* 🚨 Emergency Call Button for Students (Mobile) */}
                 {user.role === "student" && (
                   <a
                     href="tel:112"
