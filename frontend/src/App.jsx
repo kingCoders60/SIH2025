@@ -77,7 +77,7 @@ function App() {
           {/* Public */}
           <Route path="/" element={<Home />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
-          <Route path='/drills' element={<Drills />} />
+          {/* <Route path='/drills' element={<Drills />} /> */}
 
           {/* Auth */}
           <Route
