@@ -2,7 +2,8 @@ export const mockDrills = [
   {
     id: 1,
     title: "Office Fire Evacuation",
-    description: "Practice proper fire evacuation procedures in a multi-story office building scenario.",
+    description:
+      "Practice proper fire evacuation procedures in a multi-story office building scenario.",
     type: "fire",
     status: "upcoming",
     difficulty: "medium",
@@ -63,7 +64,8 @@ export const mockDrills = [
   {
     id: 2,
     title: "Earthquake Drop and Cover",
-    description: "Learn and practice the proper Drop, Cover, and Hold On technique during an earthquake.",
+    description:
+      "Learn and practice the proper Drop, Cover, and Hold On technique during an earthquake.",
     type: "shelter",
     status: "active",
     difficulty: "easy",
@@ -109,7 +111,8 @@ export const mockDrills = [
   {
     id: 3,
     title: "Severe Weather Shelter",
-    description: "Practice taking shelter during a tornado warning in a school environment.",
+    description:
+      "Practice taking shelter during a tornado warning in a school environment.",
     type: "shelter",
     status: "upcoming",
     difficulty: "easy",
@@ -140,7 +143,8 @@ export const mockDrills = [
   {
     id: 4,
     title: "Medical Emergency Response",
-    description: "Learn how to respond to a medical emergency and provide basic first aid.",
+    description:
+      "Learn how to respond to a medical emergency and provide basic first aid.",
     type: "medical",
     status: "completed",
     difficulty: "hard",
@@ -171,7 +175,8 @@ export const mockDrills = [
   {
     id: 5,
     title: "Communication System Test",
-    description: "Practice using emergency communication systems and protocols during a crisis.",
+    description:
+      "Practice using emergency communication systems and protocols during a crisis.",
     type: "communication",
     status: "upcoming",
     difficulty: "medium",
@@ -199,4 +204,4 @@ export const mockDrills = [
       },
     ],
   },
-]
+];

@@ -7,7 +7,17 @@ import { useAuth } from "../context/AuthProvider";
 import DrillCard from "../components/drills/DrillCard";
 import DrillSimulation from "../components/drills/DrillSimulation";
 import { mockDrills } from "../data/mockDrills";
-import { Target, Clock, Users, Filter, Calendar, Loader, AlertCircle, Award, Shield } from "lucide-react";
+import {
+  Target,
+  Clock,
+  Users,
+  Filter,
+  Calendar,
+  Loader,
+  AlertCircle,
+  Award,
+  Shield,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
 // Small interactive icon component
@@ -16,11 +26,14 @@ const SmallIcon = ({ icon: Icon, className = "", animate = true }) => {
     <motion.div
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      animate={animate ? {
-        rotate: [0, -5, 5, -5, 0],
-        transition: { duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-      } : {}}
-    >
+      animate={
+        animate
+          ? {
+              rotate: [0, -5, 5, -5, 0],
+              transition: { duration: 0.5, repeat: Infinity, repeatDelay: 3 },
+            }
+          : {}
+      }>
       <Icon className={`transition-colors duration-200 ${className}`} />
     </motion.div>
   );
@@ -33,10 +46,12 @@ const InteractiveIcon = ({ icon: Icon, color, text, onClick, className }) => {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={`flex items-center ${className} cursor-pointer group`}
-      onClick={onClick}
-    >
-      <div className={`p-3 rounded-lg ${color} border transition-colors duration-200 group-hover:border-opacity-70`}>
-        <Icon className={`h-6 w-6 transition-transform duration-200 group-hover:scale-110`} />
+      onClick={onClick}>
+      <div
+        className={`p-3 rounded-lg ${color} border transition-colors duration-200 group-hover:border-opacity-70`}>
+        <Icon
+          className={`h-6 w-6 transition-transform duration-200 group-hover:scale-110`}
+        />
       </div>
       {text && (
         <div className="ml-3">
@@ -98,19 +113,20 @@ const Drills = () => {
   }, [user]);
 
   // Only run filter logic when data is not loading
-  console.log('Current drills:', drills); // Debug log
+  console.log("Current drills:", drills); // Debug log
 
-  const filteredDrills = loading
-    ? []
-    : drills.filter((drill) => {
-        const matchesStatus =
-          filterStatus === "all" || 
-          drill.status.toLowerCase() === filterStatus.toLowerCase();
-        const matchesType = 
-          filterType === "all" || 
-          drill.type.toLowerCase() === filterType.toLowerCase();
-        return matchesStatus && matchesType;
-      });
+  const filteredDrills =
+    Array.isArray(drills) && !loading
+      ? drills.filter((drill) => {
+          const matchesStatus =
+            filterStatus === "all" ||
+            drill.status?.toLowerCase() === filterStatus.toLowerCase();
+          const matchesType =
+            filterType === "all" ||
+            drill.type?.toLowerCase() === filterType.toLowerCase();
+          return matchesStatus && matchesType;
+        })
+      : [];
 
   const upcomingDrills = filteredDrills.filter(
     (drill) => drill.status.toLowerCase() === "upcoming"
@@ -123,11 +139,11 @@ const Drills = () => {
   );
 
   // Debug logs
-  console.log('Filtered drills:', {
+  console.log("Filtered drills:", {
     all: filteredDrills.length,
     upcoming: upcomingDrills.length,
     active: activeDrills.length,
-    completed: completedDrills.length
+    completed: completedDrills.length,
   });
 
   if (loading) {
@@ -136,26 +152,24 @@ const Drills = () => {
         <motion.div
           animate={{
             scale: [1, 1.2, 1],
-            rotate: [0, 360]
+            rotate: [0, 360],
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
+            ease: "easeInOut",
+          }}>
           <Loader className="mr-2 text-primary-500" />
         </motion.div>
         <motion.span
           animate={{
-            opacity: [1, 0.5, 1]
+            opacity: [1, 0.5, 1],
           }}
           transition={{
             duration: 1.5,
             repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
+            ease: "easeInOut",
+          }}>
           Loading drills...
         </motion.span>
       </div>
@@ -190,31 +204,30 @@ const Drills = () => {
           </h1>
           <p className="text-gray-600 mb-4">{viewingDrill.description}</p>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
-          >
-            <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <motion.div
               className="flex items-center text-sm text-gray-500"
-              whileHover={{ scale: 1.05, x: 5 }}
-            >
+              whileHover={{ scale: 1.05, x: 5 }}>
               <SmallIcon icon={Clock} className="h-4 w-4 mr-2 text-blue-500" />
               <span>{viewingDrill.duration}</span>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="flex items-center text-sm text-gray-500"
-              whileHover={{ scale: 1.05, x: 5 }}
-            >
+              whileHover={{ scale: 1.05, x: 5 }}>
               <SmallIcon icon={Users} className="h-4 w-4 mr-2 text-green-500" />
               <span>{viewingDrill.participants} participants</span>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="flex items-center text-sm text-gray-500"
-              whileHover={{ scale: 1.05, x: 5 }}
-            >
-              <SmallIcon icon={Target} className="h-4 w-4 mr-2 text-purple-500" />
+              whileHover={{ scale: 1.05, x: 5 }}>
+              <SmallIcon
+                icon={Target}
+                className="h-4 w-4 mr-2 text-purple-500"
+              />
               <span className="capitalize">
                 {viewingDrill.difficulty} difficulty
               </span>
@@ -258,29 +271,32 @@ const Drills = () => {
               Practice emergency procedures with realistic simulations
             </p>
           </div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex items-center space-x-4 text-sm text-gray-500"
-          >
-            <motion.div 
+            className="flex items-center space-x-4 text-sm text-gray-500">
+            <motion.div
               className="flex items-center"
-              whileHover={{ scale: 1.05 }}
-            >
-              <SmallIcon icon={Target} className="h-4 w-4 mr-1 text-primary-500" />
+              whileHover={{ scale: 1.05 }}>
+              <SmallIcon
+                icon={Target}
+                className="h-4 w-4 mr-1 text-primary-500"
+              />
               <span>{filteredDrills.length} drills</span>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="flex items-center"
-              whileHover={{ scale: 1.05 }}
-            >
-              <SmallIcon icon={Users} className="h-4 w-4 mr-1 text-primary-500" />
+              whileHover={{ scale: 1.05 }}>
+              <SmallIcon
+                icon={Users}
+                className="h-4 w-4 mr-1 text-primary-500"
+              />
               <span>{user?.stats?.drillsParticipated || 0} completed</span>
             </motion.div>
           </motion.div>
         </div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -288,8 +304,7 @@ const Drills = () => {
           <div className="flex items-center space-x-2">
             <motion.div
               whileHover={{ rotate: 90 }}
-              transition={{ duration: 0.2 }}
-            >
+              transition={{ duration: 0.2 }}>
               <Filter className="h-4 w-4 text-gray-500" />
             </motion.div>
             <motion.select
@@ -319,7 +334,7 @@ const Drills = () => {
           </motion.select>
         </motion.div>
       </div>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -330,7 +345,7 @@ const Drills = () => {
             color="bg-green-50 border-green-200"
             text={{
               label: "Drills Completed",
-              value: user?.stats?.drillsParticipated || 0
+              value: user?.stats?.drillsParticipated || 0,
             }}
             onClick={() => setFilterStatus("completed")}
             className="text-green-600"
@@ -343,7 +358,7 @@ const Drills = () => {
             color="bg-blue-50 border-blue-200"
             text={{
               label: "Active Drills",
-              value: activeDrills.length
+              value: activeDrills.length,
             }}
             onClick={() => setFilterStatus("active")}
             className="text-blue-600"
@@ -356,7 +371,7 @@ const Drills = () => {
             color="bg-yellow-50 border-yellow-200"
             text={{
               label: "Upcoming Drills",
-              value: upcomingDrills.length
+              value: upcomingDrills.length,
             }}
             onClick={() => setFilterStatus("upcoming")}
             className="text-yellow-600"
@@ -369,7 +384,7 @@ const Drills = () => {
             color="bg-purple-50 border-purple-200"
             text={{
               label: "Average Score",
-              value: "85%"
+              value: "85%",
             }}
             className="text-purple-600"
           />
@@ -413,8 +428,7 @@ const Drills = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
+          transition={{ duration: 0.5, delay: 0.2 }}>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Completed Drills ({completedDrills.length})
           </h2>
@@ -431,38 +445,34 @@ const Drills = () => {
         </motion.div>
       )}
       {filteredDrills.length === 0 && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
-          className="text-center py-12"
-        >
+          className="text-center py-12">
           <motion.div
-            animate={{ 
+            animate={{
               rotate: [0, -10, 10, -10, 10, 0],
-              scale: [1, 1.1, 1]
+              scale: [1, 1.1, 1],
             }}
-            transition={{ 
+            transition={{
               duration: 2,
               repeat: Infinity,
-              repeatDelay: 1
-            }}
-          >
+              repeatDelay: 1,
+            }}>
             <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           </motion.div>
-          <motion.h3 
+          <motion.h3
             initial={{ y: 20 }}
             animate={{ y: 0 }}
-            className="text-lg font-medium text-gray-900 mb-2"
-          >
+            className="text-lg font-medium text-gray-900 mb-2">
             No drills found
           </motion.h3>
-          <motion.p 
+          <motion.p
             initial={{ y: 20 }}
             animate={{ y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gray-600"
-          >
+            className="text-gray-600">
             Try adjusting your filter criteria
           </motion.p>
         </motion.div>
