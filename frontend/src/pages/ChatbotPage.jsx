@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Send, Bot, ArrowLeft } from "lucide-react";
@@ -13,6 +20,20 @@ const initialMessages = [
     sender: "ai",
   },
 ];
+
+const disasterReplies = {
+  earthquake:
+    "During an earthquake, drop, cover, and hold on. Stay away from windows and heavy furniture.",
+  flood:
+    "Move to higher ground immediately. Avoid walking or driving through floodwaters.",
+  fire: "Evacuate calmly. Use stairs, not elevators. If trapped, signal for help from a window.",
+  cyclone:
+    "Stay indoors, close windows, and keep emergency supplies ready. Follow official alerts.",
+  tsunami:
+    "Head to higher ground immediately. Do not wait for official warnings if you feel strong shaking near the coast.",
+  landslide:
+    "Move away from the path of the slide. Stay alert during heavy rainfall in hilly areas.",
+};
 
 const ChatbotPage = () => {
   const [messages, setMessages] = useState(initialMessages);
@@ -28,19 +49,29 @@ const ChatbotPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
+
     const userMsg = {
       id: Date.now(),
       text: input,
       sender: "user",
     };
+
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+
+    const lowerInput = input.toLowerCase();
+    const matchedReply = Object.entries(disasterReplies).find(([keyword]) =>
+      lowerInput.includes(keyword)
+    );
+
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
-          text: "Thanks for your question. Here's what I found...",
+          text: matchedReply
+            ? matchedReply[1]
+            : "Thanks for your question. Here's what I found...",
           sender: "ai",
         },
       ]);
@@ -61,8 +92,12 @@ const ChatbotPage = () => {
                 <Bot className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">AI Assistant</h1>
-                <p className="text-sm text-gray-500">Your disaster preparedness expert</p>
+                <h1 className="text-xl font-semibold text-gray-900">
+                  AI Assistant
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Your disaster preparedness expert
+                </p>
               </div>
             </div>
           </div>
@@ -76,56 +111,67 @@ const ChatbotPage = () => {
                 <span className="text-blue-600 animate-pulse">•</span>
                 AI Assistant Online
               </CardTitle>
-              <CardDescription>Ask me anything about disaster preparedness and safety</CardDescription>
+              <CardDescription>
+                Ask me anything about disaster preparedness and safety
+              </CardDescription>
             </CardHeader>
-        <CardContent className="flex-1 overflow-y-auto py-4 px-2" style={{ scrollbarWidth: "thin" }}>
-          <div className="flex flex-col gap-4">
-            <AnimatePresence>
-              {messages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.4 }}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`rounded-xl px-4 py-2 max-w-[80%] text-base shadow-sm"
-                      ${msg.sender === "user" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-900"}`}
-                  >
-                    {msg.text}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            <div ref={messagesEndRef} />
-          </div>
-        </CardContent>
-        <CardFooter className="border-t pt-4 bg-white">
-          <form className="flex w-full gap-2" onSubmit={handleSubmit} autoComplete="off">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-              autoFocus
-            />
-            <Button 
-              type="submit" 
-              variant="primary" 
-              size="icon" 
-              aria-label="Send"
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20"
-            >
-              <Send className="w-5 h-5" />
-            </Button>
-          </form>
-        </CardFooter>
-      </Card>
+
+            <CardContent
+              className="flex-1 overflow-y-auto py-4 px-2"
+              style={{ scrollbarWidth: "thin" }}>
+              <div className="flex flex-col gap-4">
+                <AnimatePresence>
+                  {messages.map((msg) => (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.4 }}
+                      className={`flex ${
+                        msg.sender === "user" ? "justify-end" : "justify-start"
+                      }`}>
+                      <div
+                        className={`rounded-xl px-4 py-2 max-w-[80%] text-base shadow-sm ${
+                          msg.sender === "user"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-gray-900"
+                        }`}>
+                        {msg.text}
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                <div ref={messagesEndRef} />
+              </div>
+            </CardContent>
+
+            <CardFooter className="border-t pt-4 bg-white">
+              <form
+                className="flex w-full gap-2"
+                onSubmit={handleSubmit}
+                autoComplete="off">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-1 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  autoFocus
+                />
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="icon"
+                  aria-label="Send"
+                  className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20">
+                  <Send className="w-5 h-5" />
+                </Button>
+              </form>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   );
 };
 
