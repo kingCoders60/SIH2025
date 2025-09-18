@@ -1,0 +1,24 @@
+<form id="reportForm">
+  Type: <input type="text" name="disaster_type"><br>
+  Location: <input type="text" name="location"><br>
+  Severity: <input type="text" name="severity"><br>
+  Description: <textarea name="description"></textarea><br>
+  <button type="submit">Submit</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+document.getElementById("reportForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const response = await fetch("/report", { method: "POST", body: formData });
+
+  if (response.ok) {
+    document.getElementById("message").innerHTML = "✅ Report submitted!";
+    this.reset(); // clear form
+  } else {
+    document.getElementById("message").innerHTML = "❌ Error submitting report";
+  }
+});
+</script>
