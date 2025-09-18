@@ -3,21 +3,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { useTheme } from "../context/ThemeContext"; // Import the useTheme hook
-import {
-  Shield,
-  Menu,
-  X,
-  LogOut,
-  PanelLeft,
-  PanelLeftClose,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { Shield, Menu, X, LogOut, Sun, Moon } from "lucide-react";
 
 const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const { user, logout } = useAuth();
-  const { isDarkMode, toggleDarkMode } = useTheme(); // Use the theme context
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -39,7 +30,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            {/* Dark mode toggle for desktop */}
+            {/* Dark mode toggle */}
             <button
               onClick={toggleDarkMode}
               className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -68,6 +59,16 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   className="text-gray-700 dark:text-gray-400 hover:text-primary-600 font-medium transition-colors">
                   Dashboard
                 </Link>
+
+                {/* 🚨 Emergency Call Button for Students */}
+                {user.role === "student" && (
+                  <a
+                    href="tel:112"
+                    className="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200">
+                    🚨 Emergency Call
+                  </a>
+                )}
+
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     <img
@@ -92,8 +93,8 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             )}
           </div>
 
+          {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center space-x-4">
-            {/* Dark mode toggle for mobile */}
             <button
               onClick={toggleDarkMode}
               className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
@@ -115,6 +116,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4">
             {!user ? (
@@ -151,6 +153,17 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                     </div>
                   </div>
                 </div>
+
+                {/* 🚨 Emergency Call Button for Students (Mobile) */}
+                {user.role === "student" && (
+                  <a
+                    href="tel:112"
+                    className="block px-4 py-2 text-white bg-red-600 rounded-lg text-center font-semibold hover:bg-red-700 transition"
+                    onClick={() => setIsMenuOpen(false)}>
+                    🚨 Emergency Call
+                  </a>
+                )}
+
                 <Link
                   to="/dashboard"
                   className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
