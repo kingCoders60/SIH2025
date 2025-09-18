@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    #lastUpdated {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      background: #e74c3c;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #c0392b;
+    }
+    #msg {
+      margin-top: 10px;
+      font-size: 14px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 Disaster Reports (Admin)</h1>
+
+  <h2>All Reports</h2>
+  <table id="reportsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Time</th>
+        <th>Severity</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <button onclick="clearReports()">🗑️ Clear All Reports</button>
+  <p id="msg"></p>
+  <p id="lastUpdated">Last updated: never</p>
+
+  <script>
+    async function loadReports() {
+      try {
+        const response = await fetch("/disasters"); // your GET route
+        const reports = await response.json();
+
+        const tbody = document.querySelector("#reportsTable tbody");
+        tbody.innerHTML = "";
+
+        if (reports.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No reports available</td></tr>`;
+        } else {
+          reports.forEach(r => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+              <td>${r._id}</td>
+              <td>${r.disaster_type}</td>
+              <td>${r.location}</td>
+              <td>${new Date(r.time).toLocaleString()}</td>
+              <td>${r.severity || ""}</td>
+              <td>${r.description || ""}</td>
+            `;
+          });
+        }
+
+        document.getElementById("lastUpdated").textContent =
+          "Last updated: " + new Date().toLocaleTimeString();
+      } catch (err) {
+        console.error("Error loading reports:", err);
+      }
+    }
+
+    async function clearReports() {
+      if (confirm("Delete ALL reports?")) {
+        let res = await fetch("/clear_reports", { method: "POST" });
+        if (res.ok) {
+          document.getElementById("msg").innerText = "✅ All reports cleared!";
+          loadReports();
+        } else {
+          document.getElementById("msg").innerText = "❌ Error clearing reports.";
+        }
+      }
+    }
+
+    // Load once and refresh every 5 sec
+    loadReports();
+    setInterval(loadReports, 5000);
+  </script>
+</body>
+</html>
