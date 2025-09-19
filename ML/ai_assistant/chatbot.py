@@ -1,4 +1,3 @@
-# chatbot.py
 import os
 import sys
 import time
@@ -6,15 +5,15 @@ from dotenv import load_dotenv
 from google import genai
 import google.genai.errors as genai_errors
 
-# Load secrets from .env
+
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
 PASSWORD = os.getenv("CHATBOT_PASSWORD")
 
-# Initialize Gemini client
+
 client = genai.Client(api_key=API_KEY)
 
-# Safe wrapper to handle 503 overload errors
+
 def safe_generate(model: str, user_input: str, retries: int = 5):
     wait = 3
     for attempt in range(1, retries + 1):
@@ -30,12 +29,12 @@ def safe_generate(model: str, user_input: str, retries: int = 5):
                 wait *= 2
             else:
                 raise e
-    # If retries fail, return fallback
+    
     class Dummy:
         text = "Sorry, the AI is currently overloaded. Please try again later."
     return Dummy()
 
-# Safe wrapper for chat.send_message
+
 def safe_chat_send(chat, user_input: str, retries: int = 5):
     wait = 3
     for attempt in range(1, retries + 1):
@@ -52,7 +51,7 @@ def safe_chat_send(chat, user_input: str, retries: int = 5):
         text = "Sorry, the AI is currently overloaded. Please try again later."
     return Dummy()
 
-# Disaster-topic filter
+
 def is_disaster_related(user_input: str) -> bool:
     moderation = safe_generate(
         "gemini-2.5-flash",
@@ -74,7 +73,7 @@ def chatbot():
         print("Sorry, wrong password.")
         return
 
-    # Filter non-disaster queries
+    
     if not is_disaster_related(user_input):
         message = (
             "Sorry, I can only answer questions about natural disasters, "
@@ -88,12 +87,12 @@ def chatbot():
         print(message)
         return
 
-    # Session memory (lives only while Node.js keeps process alive)
+    
     global chat
     if "chat" not in globals():
         chat = client.chats.create(model="gemini-2.5-flash")
 
-    # Get response safely with retries
+    
     response = safe_chat_send(chat, user_input)
     print(response.text)
 

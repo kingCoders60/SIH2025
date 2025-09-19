@@ -8,20 +8,58 @@
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       height: 100vh;
       margin: 0;
+      padding-right: 30px;
+      position: relative;
     }
+
+   
+    .chat-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #6a0dad; 
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: transform 0.2s ease-in-out;
+      overflow: hidden;
+    }
+    .chat-toggle:hover {
+      transform: scale(1.1);
+    }
+    .chat-toggle span {
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    
     .chat-container {
       width: 400px;
-      height: 600px;
       background: #fff;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       overflow: hidden;
+      position: fixed;
+      top: 60px;        
+      bottom: 30px;     
+      right: 30px;
+      height: auto;    
+      max-height: calc(100vh - 90px); 
+      display: none;
+      z-index: 999;
     }
     .chat-header {
       background: #6a0dad;
@@ -29,6 +67,16 @@
       padding: 15px;
       font-size: 18px;
       font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
     }
     .chat-box {
       flex: 1;
@@ -84,8 +132,15 @@
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">🤖 AI ASSISTANT</div>
+  
+  <button class="chat-toggle" id="chatToggle" onclick="openChat()"><span>🤖</span></button>
+
+
+  <div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+      🤖 AI ASSISTANT
+      <button class="close-btn" onclick="closeChat()">✖</button>
+    </div>
     <div class="chat-box" id="chatbox">
       <div class="message bot">Hey there 👋 How can I help you today?</div>
     </div>
@@ -96,13 +151,27 @@
   </div>
 
   <script>
+    function openChat() {
+      document.getElementById("chatContainer").style.display = "flex";
+      document.getElementById("chatToggle").style.display = "none"; 
+    }
+
+    function closeChat() {
+      document.getElementById("chatContainer").style.display = "none";
+      document.getElementById("chatToggle").style.display = "flex"; 
+      
+      
+      const chatbox = document.getElementById("chatbox");
+      chatbox.innerHTML = '<div class="message bot">Hey there 👋 How can I help you today?</div>';
+    }
+
     async function sendMessage() {
       const input = document.getElementById("message");
       const chatbox = document.getElementById("chatbox");
       const message = input.value.trim();
       if (!message) return;
 
-      // User message
+      
       const userMsg = document.createElement("div");
       userMsg.className = "message user";
       userMsg.innerText = message;
@@ -110,14 +179,14 @@
       chatbox.scrollTop = chatbox.scrollHeight;
       input.value = "";
 
-      // Bot thinking message
+      
       const thinkingMsg = document.createElement("div");
       thinkingMsg.className = "message bot thinking";
       thinkingMsg.innerText = "Thinking...";
       chatbox.appendChild(thinkingMsg);
       chatbox.scrollTop = chatbox.scrollHeight;
 
-      // Simulated server reply
+      
       const response = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -125,10 +194,10 @@
       });
       const data = await response.json();
 
-      // Remove thinking message
+      
       chatbox.removeChild(thinkingMsg);
 
-      // Bot reply
+      
       const botMsg = document.createElement("div");
       botMsg.className = "message bot";
       botMsg.innerText = data.reply;
@@ -138,5 +207,14 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
