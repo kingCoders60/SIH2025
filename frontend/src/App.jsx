@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import AnimatedBackground from "./components/AnimatedBackground";
 import { ThemeProvider } from "./context/ThemeContext";
+import { Toaster } from "react-hot-toast";
 
 // Pages
 import Home from "./pages/Home";
@@ -23,6 +24,7 @@ import Gamification from "./pages/Gamification"; // ✅ Added
 // Components
 import Leaderboard from "./components/Leaderboard";
 import FloatingAiIcon from "./components/FloatingAiIcon";
+import ReportCasePage from "./pages/ReportCasePage";
 
 // Protected Route
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -71,6 +73,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
+      <Toaster position="top-right" />
       <AnimatedBackground />
       <ThemeProvider>
         <Routes>
@@ -191,6 +194,16 @@ function App() {
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="/report-case"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ReportCasePage />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </ThemeProvider>
       <FloatingAiIcon />
