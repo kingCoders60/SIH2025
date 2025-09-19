@@ -135,9 +135,9 @@ Code
 │   ├── components/
 │   ├── pages/
 │   └── services/
-├── ml-services/
-│   ├── risk_predictor.py
-│   ├── preparedness_score.py
-|   └── manual_data_fetch.py
+└──  ml-services/
+    ├── risk_predictor.py
+    ├── ai_assistant/
+    └── manual_data_fetch/
 
 ```
