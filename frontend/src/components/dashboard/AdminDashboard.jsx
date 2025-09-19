@@ -15,6 +15,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import RegionReportChart from "../RegionReportChart"; // ✅ Chart component
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -148,6 +149,9 @@ const AdminDashboard = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
+
+        {/* ✅ Region Report Chart */}
+        <RegionReportChart />
       </div>
 
       {/* Main Content Grid */}

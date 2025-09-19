@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
@@ -50,6 +49,12 @@ const Sidebar = () => {
       roles: ["student", "teacher", "admin"],
     },
     { name: "Admin Panel", href: "/admin", icon: Settings, roles: ["admin"] },
+    {
+      name: "Report Case",
+      href: "/report-case",
+      icon: AlertTriangle,
+      roles: ["student", "teacher"],
+    },
   ];
 
   const filteredNavigation = navigation.filter((item) =>
