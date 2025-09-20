@@ -1,16 +1,38 @@
-"use client"
+"use client";
 
-import { CheckCircle, Clock, AlertCircle } from "lucide-react"
+import { CheckCircle, Clock, AlertCircle } from "lucide-react";
 
-const ProgressCard = ({ title, description, progress, status, dueDate, onClick }) => {
+const ProgressCard = ({
+  title,
+  description,
+  progress,
+  status,
+  dueDate,
+  onClick,
+}) => {
   const statusConfig = {
-    completed: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-50", border: "border-green-200" },
-    in_progress: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-50", border: "border-yellow-200" },
-    overdue: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-50", border: "border-red-200" },
-  }
+    completed: {
+      icon: CheckCircle,
+      color: "text-green-600",
+      bg: "bg-green-50",
+      border: "border-green-200",
+    },
+    in_progress: {
+      icon: Clock,
+      color: "text-yellow-600",
+      bg: "bg-yellow-50",
+      border: "border-yellow-200",
+    },
+    overdue: {
+      icon: AlertCircle,
+      color: "text-red-600",
+      bg: "bg-red-50",
+      border: "border-red-200",
+    },
+  };
 
-  const config = statusConfig[status] || statusConfig.in_progress
-  const StatusIcon = config.icon
+  const config = statusConfig[status] || statusConfig.in_progress;
+  const StatusIcon = config.icon;
 
   return (
     <div
@@ -35,14 +57,17 @@ const ProgressCard = ({ title, description, progress, status, dueDate, onClick }
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
+            style={{ width: `${progress}%` }}></div>
         </div>
       </div>
 
-      {dueDate && <div className="text-sm text-gray-500">Due: {new Date(dueDate).toLocaleDateString()}</div>}
+      {dueDate && (
+        <div className="text-sm text-gray-500">
+          Due: {new Date(dueDate).toLocaleDateString()}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default ProgressCard
+export default ProgressCard;
