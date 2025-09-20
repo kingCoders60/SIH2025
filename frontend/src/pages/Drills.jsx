@@ -2,7 +2,7 @@
 "use client";
 
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../context/AuthProvider";
 import DrillCard from "../components/drills/DrillCard";
 import DrillSimulation from "../components/drills/DrillSimulation";
@@ -65,7 +65,6 @@ const InteractiveIcon = ({ icon: Icon, color, text, onClick, className }) => {
 
 const Drills = () => {
   const { user, updateUserStats } = useAuth();
-
   const [drills, setDrills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDrill, setSelectedDrill] = useState(null);
@@ -82,46 +81,43 @@ const Drills = () => {
   };
 
   const handleDrillComplete = async (completionData) => {
-    // 1. Persist the change to the backend
     try {
       await axios.post(`http://localhost:5001/api/v1/drills/complete`, {
-        rillId: selectedDrill._id,
+        drillId: selectedDrill._id,
         userId: user._id,
         score: completionData.score,
-      }); 
+      });
 
-    // 2. Update the local drills state to reflect the change instantly
+      // Update the local drills state to reflect the change instantly
       setDrills((currentDrills) =>
         currentDrills.map((drill) =>
           drill._id === selectedDrill._id
-            ? { ...drill, status: "completed" } // Update the status of the completed drill
+            ? { ...drill, status: "completed" }
             : drill
         )
       );
 
-    // 3. Update user stats
-    updateUserStats({
-      drillsParticipated: (user?.stats?.drillsParticipated || 0) + 1,
-      totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
-    });
+      // Update user stats
+      updateUserStats({
+        drillsParticipated: (user?.stats?.drillsParticipated || 0) + 1,
+        totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
+      });
 
-    // 4. Close drill simulation
-    setSelectedDrill(null);
-
+      // Close drill simulation
+      setSelectedDrill(null);
     } catch (error) {
       console.error("Failed to complete drill:", error);
-      // Optionally, show an error message to the user
     }
   };
 
   useEffect(() => {
     const fetchDrills = async () => {
       try {
-        // const { data } = await axios.get(`/api/drills/user/${user._id}`);
         const { data } = await axios.get(
-          `http://localhost:5001/api/v1/drills/user/${user._id}`
+          `http://localhost:5001/api/v1/drills/user/${user?._id}`
         );
-        setDrills(data);
+        // Ensure data is an array to prevent the TypeError
+        setDrills(Array.isArray(data) ? data : mockDrills);
       } catch (err) {
         console.error("Failed to fetch drills from API. Using mock data.", err);
         setDrills(mockDrills);
@@ -130,19 +126,19 @@ const Drills = () => {
       }
     };
 
+    // Only fetch if a user is available.
     if (user?._id) {
       fetchDrills();
     } else {
+      // If no user, use mock data immediately
       setDrills(mockDrills);
       setLoading(false);
     }
   }, [user]);
 
-  // Only run filter logic when data is not loading
-  console.log("Current drills:", drills); // Debug log
-
-  const filteredDrills =
-    Array.isArray(drills) && !loading
+  // Use useMemo to prevent re-filtering on every render
+  const filteredDrills = useMemo(() => {
+    return Array.isArray(drills)
       ? drills.filter((drill) => {
           const matchesStatus =
             filterStatus === "all" ||
@@ -153,24 +149,17 @@ const Drills = () => {
           return matchesStatus && matchesType;
         })
       : [];
+  }, [drills, filterStatus, filterType]);
 
   const upcomingDrills = filteredDrills.filter(
-    (drill) => drill.status.toLowerCase() === "upcoming"
+    (drill) => drill.status?.toLowerCase() === "upcoming"
   );
   const activeDrills = filteredDrills.filter(
-    (drill) => drill.status.toLowerCase() === "active"
+    (drill) => drill.status?.toLowerCase() === "active"
   );
   const completedDrills = filteredDrills.filter(
-    (drill) => drill.status.toLowerCase() === "completed"
+    (drill) => drill.status?.toLowerCase() === "completed"
   );
-
-  // Debug logs
-  console.log("Filtered drills:", {
-    all: filteredDrills.length,
-    upcoming: upcomingDrills.length,
-    active: activeDrills.length,
-    completed: completedDrills.length,
-  });
 
   if (loading) {
     return (
@@ -371,7 +360,7 @@ const Drills = () => {
             color="bg-green-50 border-green-200"
             text={{
               label: "Drills Completed",
-              value: user?.stats?.drillsParticipated || 0,
+              value: completedDrills.length,
             }}
             onClick={() => setFilterStatus("completed")}
             className="text-green-600"
@@ -409,15 +398,19 @@ const Drills = () => {
             icon={Shield}
             color="bg-purple-50 border-purple-200"
             text={{
-              label: "Average Score",
-              value: "85%",
+              label: "Total Drills",
+              value: filteredDrills.length,
             }}
+            onClick={() => setFilterStatus("all")}
             className="text-purple-600"
           />
         </div>
       </motion.div>
       {activeDrills.length > 0 && (
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Active Drills
           </h2>
@@ -431,10 +424,13 @@ const Drills = () => {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
       {upcomingDrills.length > 0 && (
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Upcoming Drills
           </h2>
@@ -448,7 +444,7 @@ const Drills = () => {
               />
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
       {completedDrills.length > 0 && (
         <motion.div
