@@ -24,7 +24,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo + Hackathon Image */}
           <div className="flex items-center space-x-4">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link to="/dashboard" className="flex items-center space-x-2">
               <Shield className="h-8 w-8 text-primary-600" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 DisasterPrep
@@ -37,7 +37,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               <img
                 src="/sih25.png"
                 alt="Smart India Hackathon 2022"
-                className="h-8 w-auto"
+                className="h-8 w-auto animate-pulse"
               />
             </a>
           </div>
@@ -105,7 +105,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             )}
           </div>
 
-          {/* Mobile Toggle */}
           <div className="md:hidden flex items-center space-x-4">
             <button
               onClick={toggleDarkMode}
@@ -151,7 +150,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                 <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center space-x-2">
                     <img
-                      src={user.avatar || "/placeholder.png"}
+                      src={"/https://avatar.iran.liara.run/public/49"}
                       alt={user.name}
                       className="h-8 w-8 rounded-full"
                     />
@@ -174,7 +173,6 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                   🚨 Emergency Call
                 </a>
 
-                {/* Home Link with Icon */}
                 <Link
                   to="/dashboard"
                   className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg space-x-2"
