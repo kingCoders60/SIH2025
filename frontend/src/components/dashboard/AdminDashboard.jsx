@@ -114,7 +114,7 @@ const AdminDashboard = () => {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Drill Participation Chart */}
-        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+        <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Drill Participation Over Time
           </h3>
@@ -135,7 +135,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Preparedness Scores by Region */}
-        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+        <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Preparedness Scores by Region
           </h3>
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* System Activity */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               Recent System Activity
             </h2>
@@ -196,7 +196,7 @@ const AdminDashboard = () => {
           <QuickActions userRole="admin" />
 
           {/* System Health */}
-          <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+          <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               System Health
             </h3>

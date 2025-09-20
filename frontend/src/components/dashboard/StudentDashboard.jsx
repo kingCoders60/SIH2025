@@ -98,9 +98,9 @@ const StudentDashboard = () => {
           You're currently Level {userStats.level} with {userStats.totalXP} XP.
           Keep learning to level up!
         </p>
-        <div className="mt-4 bg-white bg-opacity-30 rounded-full h-3">
+        <div className="mt-4 bg-card bg-opacity-30 rounded-full h-3">
           <div
-            className="bg-white h-3 rounded-full transition-all duration-500 ease-out"
+            className="bg-card h-3 rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercentage}%` }}></div>
         </div>
         <p className="text-sm text-primary-100 mt-2">

@@ -86,7 +86,7 @@ const QuizEngine = ({ quiz, onComplete, onClose }) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-lg shadow-xl p-8 max-w-2xl mx-auto"
+        className="bg-card rounded-lg shadow-xl p-8 max-w-2xl mx-auto"
       >
         <div className="text-center">
           <div
@@ -144,7 +144,7 @@ const QuizEngine = ({ quiz, onComplete, onClose }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-xl max-w-4xl mx-auto">
+    <div className="bg-card rounded-lg shadow-xl max-w-4xl mx-auto">
       {/* Quiz Header */}
       <div className="bg-primary-600 text-white p-6 rounded-t-lg">
         <div className="flex items-center justify-between">
@@ -169,7 +169,7 @@ const QuizEngine = ({ quiz, onComplete, onClose }) => {
         <div className="mt-4">
           <div className="bg-primary-700 rounded-full h-2">
             <div
-              className="bg-white h-2 rounded-full transition-all duration-300"
+              className="bg-card h-2 rounded-full transition-all duration-300"
               style={{ width: `${((currentQuestion + 1) / quiz.questions.length) * 100}%` }}
             ></div>
           </div>

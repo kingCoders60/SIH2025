@@ -81,15 +81,37 @@ const Drills = () => {
     setViewingDrill(drill);
   };
 
-  const handleDrillComplete = (completionData) => {
-    // Update user stats
+  const handleDrillComplete = async (completionData) => {
+    // 1. Persist the change to the backend
+    try {
+      await axios.post(`http://localhost:5001/api/v1/drills/complete`, {
+        rillId: selectedDrill._id,
+        userId: user._id,
+        score: completionData.score,
+      }); 
+
+    // 2. Update the local drills state to reflect the change instantly
+      setDrills((currentDrills) =>
+        currentDrills.map((drill) =>
+          drill._id === selectedDrill._id
+            ? { ...drill, status: "completed" } // Update the status of the completed drill
+            : drill
+        )
+      );
+
+    // 3. Update user stats
     updateUserStats({
       drillsParticipated: (user?.stats?.drillsParticipated || 0) + 1,
       totalXP: (user?.stats?.totalXP || 0) + completionData.xpEarned,
     });
 
-    // Close drill simulation
+    // 4. Close drill simulation
     setSelectedDrill(null);
+
+    } catch (error) {
+      console.error("Failed to complete drill:", error);
+      // Optionally, show an error message to the user
+    }
   };
 
   useEffect(() => {

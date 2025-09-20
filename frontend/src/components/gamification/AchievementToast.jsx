@@ -25,7 +25,7 @@ const AchievementToast = ({ achievement, onClose, duration = 5000 }) => {
       <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg shadow-lg p-4 max-w-sm">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <div className="bg-white bg-opacity-20 rounded-full p-2">
+            <div className="bg-card bg-opacity-20 rounded-full p-2">
               <Trophy className="w-6 h-6" />
             </div>
           </div>
@@ -38,8 +38,8 @@ const AchievementToast = ({ achievement, onClose, duration = 5000 }) => {
             <h3 className="font-bold text-lg">{achievement.name}</h3>
             <p className="text-sm opacity-90">{achievement.description}</p>
             <div className="flex items-center space-x-2 mt-2">
-              <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">+{achievement.xpReward} XP</span>
-              <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">{achievement.rarity}</span>
+              <span className="text-xs bg-card bg-opacity-20 px-2 py-1 rounded-full">+{achievement.xpReward} XP</span>
+              <span className="text-xs bg-card bg-opacity-20 px-2 py-1 rounded-full">{achievement.rarity}</span>
             </div>
           </div>
 

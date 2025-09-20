@@ -30,7 +30,7 @@ const ContactCard = ({ contact }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start space-x-4">
         <div className={`p-3 rounded-lg bg-gradient-to-r ${getServiceColor(contact.type)} text-white text-2xl`}>
           {getServiceIcon(contact.type)}

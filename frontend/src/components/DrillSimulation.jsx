@@ -99,7 +99,7 @@ const DrillSimulation = ({ drill, onComplete }) => {
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Drill Complete!</h2>
           <p className="text-gray-600 mb-6">Great job completing the {drill.title} drill</p>
           
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto mb-6">
+          <div className="bg-card rounded-lg shadow-lg p-8 max-w-md mx-auto mb-6">
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Time Taken:</span>
@@ -155,7 +155,7 @@ const DrillSimulation = ({ drill, onComplete }) => {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="bg-card rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <div className="text-4xl mb-4">{step.icon}</div>
           <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
