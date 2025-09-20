@@ -206,7 +206,7 @@ function App() {
           />
         </Routes>
       </ThemeProvider>
-      <FloatingAiIcon />
+      {isAuthenticated && <FloatingAiIcon />}
     </div>
   );
 }
