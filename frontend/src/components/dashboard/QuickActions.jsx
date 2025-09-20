@@ -15,7 +15,7 @@ const QuickActions = ({ userRole }) => {
 
     const roleSpecificActions = {
       student: [
-        { icon: Award, label: "View Badges", href: "/profile", color: "bg-yellow-500" },
+        { icon: Award, label: "View Badges", href: "/gamification", color: "bg-yellow-500" },
         { icon: Users, label: "Leaderboard", href: "/leaderboard", color: "bg-purple-500" },
       ],
       teacher: [
