@@ -84,7 +84,7 @@ const ChatbotPage = () => {
         {/* Top Navigation Bar */}
         <div className="bg-white border-b px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link to="/" className="text-gray-600 hover:text-gray-900">
+            <Link to="/Dashboard" className="text-gray-600 hover:text-gray-900">
               <ArrowLeft className="w-6 h-6" />
             </Link>
             <div className="flex items-center gap-3 ml-2">
