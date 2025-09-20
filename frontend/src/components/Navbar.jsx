@@ -76,7 +76,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
 
                 {/* Emergency Call Button */}
                 <a
-                  href="tel:+911124363260"
+                  href="tel:112"
                   className="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200">
                   🚨 Emergency Call
                 </a>

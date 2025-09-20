@@ -21,11 +21,29 @@ const initialMessages = [
   },
 ];
 
+const disasterKeywords = {
+  flood: [
+    "flood",
+    "baad",
+    "pani",
+    "jal",
+    "water",
+    "amphan",
+    "barsaat",
+    "paani",
+  ],
+  earthquake: ["earthquake", "bhukamp", "tremor", "zameen hila", "quake"],
+  fire: ["fire", "aag", "smoke", "jal raha hai", "burning"],
+  cyclone: ["cyclone", "toofan", "hawa", "amphan", "storm"],
+  tsunami: ["tsunami", "samundar", "wave", "coastal flood"],
+  landslide: ["landslide", "hill slide", "pahaad", "mitti", "slope collapse"],
+};
+
 const disasterReplies = {
-  earthquake:
-    "During an earthquake, drop, cover, and hold on. Stay away from windows and heavy furniture.",
   flood:
     "Move to higher ground immediately. Avoid walking or driving through floodwaters.",
+  earthquake:
+    "During an earthquake, drop, cover, and hold on. Stay away from windows and heavy furniture.",
   fire: "Evacuate calmly. Use stairs, not elevators. If trapped, signal for help from a window.",
   cyclone:
     "Stay indoors, close windows, and keep emergency supplies ready. Follow official alerts.",
@@ -60,18 +78,22 @@ const ChatbotPage = () => {
     setInput("");
 
     const lowerInput = input.toLowerCase();
-    const matchedReply = Object.entries(disasterReplies).find(([keyword]) =>
-      lowerInput.includes(keyword)
+
+    const matchedKey = Object.entries(disasterKeywords).find(
+      ([key, variants]) =>
+        variants.some((variant) => lowerInput.includes(variant))
     );
+
+    const replyText = matchedKey
+      ? disasterReplies[matchedKey[0]]
+      : "Thanks for your question. Here's what I found...";
 
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
-          text: matchedReply
-            ? matchedReply[1]
-            : "Thanks for your question. Here's what I found...",
+          text: replyText,
           sender: "ai",
         },
       ]);
