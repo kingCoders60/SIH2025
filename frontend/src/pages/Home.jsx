@@ -69,9 +69,14 @@ const Home = () => {
               className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors text-black">
               Get Started
             </Link>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-black transition-colors">
-              Learn More
-            </button>
+            <a
+              href="https://ndma.gov.in/"
+              target="_blank"
+              rel="noopener noreferrer">
+              <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-black transition-colors">
+                Learn More
+              </button>
+            </a>
           </div>
         </div>
       </section>
