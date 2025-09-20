@@ -23,7 +23,7 @@ const ModuleCard = ({ module, onStart }) => {
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
+      className={`bg-card rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
         isHovered ? "shadow-lg transform -translate-y-1" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -43,13 +43,13 @@ const ModuleCard = ({ module, onStart }) => {
           </span>
         </div>
         <div className="absolute top-4 right-4">
-          <div className="bg-white bg-opacity-90 rounded-full p-2">
+          <div className="bg-card bg-opacity-90 rounded-full p-2">
             <BookOpen className="h-5 w-5 text-primary-600" />
           </div>
         </div>
         {module.progress > 0 && (
           <div className="absolute bottom-4 left-4 right-4">
-            <div className="bg-white bg-opacity-90 rounded-full p-2">
+            <div className="bg-card bg-opacity-90 rounded-full p-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium text-gray-700">{module.progress}% Complete</span>
                 {module.progress === 100 && <CheckCircle className="h-4 w-4 text-green-600" />}

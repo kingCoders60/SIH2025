@@ -1,8 +1,11 @@
 "use client"
 
+import { useNavigate } from "react-router-dom";
 import { BookOpen, Target, AlertTriangle, Users, Award, Settings } from "lucide-react"
 
 const QuickActions = ({ userRole }) => {
+  const navigate = useNavigate();
+
   const getActionsForRole = (role) => {
     const commonActions = [
       { icon: BookOpen, label: "Browse Modules", href: "/modules", color: "bg-blue-500" },
@@ -31,16 +34,16 @@ const QuickActions = ({ userRole }) => {
   const actions = getActionsForRole(userRole)
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+    <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {actions.map((action, index) => {
+        {actions.map((action) => {
           const Icon = action.icon
           return (
             <button
-              key={index}
+              key={action.label}
               className="flex flex-col items-center p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-              onClick={() => (window.location.href = action.href)}
+              onClick={() => navigate(action.href)}
             >
               <div className={`p-3 rounded-full ${action.color} mb-2`}>
                 <Icon className="h-5 w-5 text-white" />

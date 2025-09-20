@@ -187,7 +187,7 @@ const Alerts = () => {
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${
                     activeTab === tab.id
-                      ? "bg-white bg-opacity-20"
+                      ? "bg-card bg-opacity-20"
                       : "bg-gray-100 text-gray-600"
                   }`}>
                   {tab.count}

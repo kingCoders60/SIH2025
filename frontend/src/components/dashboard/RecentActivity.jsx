@@ -49,7 +49,7 @@ const RecentActivity = ({ activities = [] }) => {
   const displayActivities = activities.length > 0 ? activities : mockActivities
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+    <div className="bg-card rounded-lg shadow-md border border-gray-200 p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
       <div className="space-y-4">
         {displayActivities.map((activity) => {

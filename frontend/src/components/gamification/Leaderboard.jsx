@@ -28,7 +28,7 @@ const Leaderboard = ({ users, currentUserId, timeframe = "weekly" }) => {
       case 3:
         return "bg-gradient-to-r from-amber-100 to-amber-200 border-amber-300"
       default:
-        return "bg-white border-gray-200"
+        return "bg-card border-gray-200"
     }
   }
 
@@ -40,7 +40,7 @@ const Leaderboard = ({ users, currentUserId, timeframe = "weekly" }) => {
   ]
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border">
+    <div className="bg-card rounded-lg shadow-sm border">
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -61,7 +61,7 @@ const Leaderboard = ({ users, currentUserId, timeframe = "weekly" }) => {
               onClick={() => setSelectedTimeframe(tf.value)}
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
                 selectedTimeframe === tf.value
-                  ? "bg-white text-blue-600 shadow-sm"
+                  ? "bg-card text-blue-600 shadow-sm"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >

@@ -103,7 +103,7 @@ const BadgeDisplay = ({ limit = null, showTitle = true }) => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-card rounded-lg shadow p-6">
         {showTitle && <h3 className="text-lg font-semibold text-gray-900 mb-4">Badges</h3>}
         <div className="animate-pulse">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -117,7 +117,7 @@ const BadgeDisplay = ({ limit = null, showTitle = true }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-card rounded-lg shadow p-6">
       {showTitle && (
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Badges</h3>
@@ -147,7 +147,7 @@ const BadgeDisplay = ({ limit = null, showTitle = true }) => {
               </div>
               <div className={`text-xs px-2 py-1 rounded-full ${
                 badge.earned 
-                  ? 'bg-white text-gray-700' 
+                  ? 'bg-card text-gray-700' 
                   : 'bg-gray-200 text-gray-500'
               }`}>
                 {getRarityText(badge.rarity)}

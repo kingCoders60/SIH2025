@@ -30,7 +30,7 @@ const DrillCard = ({ drill, onJoin, onView }) => {
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
+      className={`bg-card rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 cursor-pointer ${
         isHovered ? "shadow-lg transform -translate-y-1" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
@@ -49,12 +49,12 @@ const DrillCard = ({ drill, onJoin, onView }) => {
           </span>
         </div>
         <div className="absolute top-4 right-4">
-          <div className="bg-white bg-opacity-90 rounded-full p-2">
+          <div className="bg-card bg-opacity-90 rounded-full p-2">
             <Target className="h-5 w-5 text-green-600" />
           </div>
         </div>
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-white bg-opacity-95 rounded-lg p-3">
+          <div className="bg-card bg-opacity-95 rounded-lg p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-2xl">{getTypeIcon(drill.type)}</span>

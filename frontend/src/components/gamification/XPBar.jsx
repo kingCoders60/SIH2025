@@ -19,7 +19,7 @@ const XPBar = ({
   const xpRemaining = safeXPToNext - xpThisLevel;
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-sm border">
+    <div className="bg-card rounded-lg p-4 shadow-sm border">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
           <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full p-2">

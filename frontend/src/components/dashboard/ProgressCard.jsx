@@ -14,7 +14,7 @@ const ProgressCard = ({ title, description, progress, status, dueDate, onClick }
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+      className="bg-card rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
       onClick={onClick}
     >
       <div className="flex items-start justify-between mb-4">

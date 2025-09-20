@@ -10,17 +10,18 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
 
   checkAuth: async () => {
-    try {
-      const res = await axiosInstance.get("/auth/check");
-      console.log("Auth check response:", res.data);
-      set({ authUser: res.data.user }); // ✅ assumes backend returns { user }
-    } catch (error) {
-      console.error("Error in checkAuth:", error);
-      set({ authUser: null });
-    } finally {
-      set({ isCheckingAuth: false });
-    }
-  },
+  try {
+    const res = await axiosInstance.get("/auth/check");
+    console.log("Auth check response:", res.data);
+    // Combine authUser and isCheckingAuth update
+    set({ authUser: res.data.user, isCheckingAuth: false }); 
+  } catch (error) {
+    console.error("Error in checkAuth:", error);
+    // Combine authUser and isCheckingAuth update
+    set({ authUser: null, isCheckingAuth: false });
+  }
+  // The 'finally' block is no longer needed
+},
 
   signup: async (data) => {
     set({ isSigningUp: true });
@@ -55,16 +56,17 @@ export const useAuthStore = create((set) => ({
   },
 
   logout: async () => {
-    try {
-      await axiosInstance.post("/auth/logout");
-      set({ authUser: null });
-      toast.success("Logged out successfully");
-    } catch (error) {
-      const message = error.response?.data?.message || "Logout failed";
-      toast.error(message);
-      console.error("Logout error:", error);
-    }
-  },
+  try {
+    await axiosInstance.post("/auth/logout");
+    toast.success("Logged out successfully");
+  } catch (error) {
+    const message = error.response?.data?.message || "Logout failed on the server";
+    toast.error(message); // Still inform the user of the server error
+    console.error("Logout error:", error);
+  } finally {
+    set({ authUser: null }); // ✅ Always clears the user from the client state
+  }
+},
 
   updateProfile: async (data) => {
     set({ isUpdatingProfile: true });
