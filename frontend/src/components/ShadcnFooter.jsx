@@ -34,9 +34,13 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { icon: Github, label: "GitHub", href: "#" },
+  { icon: Github, label: "GitHub", href: "https://github.com/kingCoders60" },
   { icon: Twitter, label: "Twitter/X", href: "#" },
-  { icon: Linkedin, label: "LinkedIn", href: "#" },
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/shivampatra49/",
+  },
 ];
 
 const ShadcnFooter = () => {
