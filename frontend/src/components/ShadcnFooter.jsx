@@ -35,7 +35,7 @@ const navLinks = [
 
 const socialLinks = [
   { icon: Github, label: "GitHub", href: "https://github.com/kingCoders60" },
-  { icon: Twitter, label: "Twitter/X", href: "#" },
+  { icon: Twitter, label: "Twitter/X", href: "https://namastex.vercel.app/" },
   {
     icon: Linkedin,
     label: "LinkedIn",
