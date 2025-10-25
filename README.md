@@ -1,8 +1,6 @@
 <div align="center">
   <h1>🛡️ Disaster Preparedness Platform 🛡️</h1>
   <p>
-    <img width="770" height="771" alt="image" src="https://github.com/user-attachments/assets/45b4fd72-77b3-40e1-83c0-c41fd414944a" />
-    <img width="770" height="771" alt="image" src="https://github.com/user-attachments/assets/f55be60c-076d-4ace-9697-4e30ef5e2067" />
     A scalable, modular MERN-based platform to enhance disaster awareness, preparedness, and response across Indian educational institutions.
   </p>
 </div>
