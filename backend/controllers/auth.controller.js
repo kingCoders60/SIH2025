@@ -34,7 +34,15 @@ export const registerUser = async (req, res) => {
     });
 
     const token = generateToken(newUser);
-    // console.log("Signup payload:", data);
+    
+    // Set httpOnly cookie for authentication
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    
     console.log("Incoming signup data:", req.body);
     res.status(201).json({ user: newUser, token });
   } catch (error) {
@@ -58,6 +66,14 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
 
     const token = generateToken(user);
+
+    // Set httpOnly cookie for authentication
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
     res.json({ user, token });
   } catch (error) {
