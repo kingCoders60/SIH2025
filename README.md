@@ -21,6 +21,9 @@ This platform empowers students and institutions by integrating real-time alerts
 
 ---
 
+frontend - https://sih2025-1-pjfk.onrender.com 
+backend - https://sih2025-ydfn.onrender.com 
+
 ## 🚀 Core Features
 
 - **🔐 Authentication:** Secure login/signup with JWT-based session management.
